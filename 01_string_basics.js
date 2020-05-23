@@ -63,3 +63,13 @@ let item = 'cucumbers';
 let price = 1.99;
 let quantity = 4;
 `You bought ${quantity} ${item}, total price: $${price * quantity}`; //"You bought 4 cucumbers, total price: $7.96"
+
+// ========== STRINGS TO NUMBERS ==========
+// parse string to number
+parseInt('24'); // 24
+parseInt('24.987'); // 24
+parseInt('28dayslater'); // 28 - its ok since string starts from number
+
+parseFloat('24.987'); // 24.987
+parseFloat('7'); // 7
+parseFloat('I ate 3 shramp'); // NaN - number is not at beginning of string
