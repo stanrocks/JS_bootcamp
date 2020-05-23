@@ -39,3 +39,27 @@ greeting.trim(); // 'meow meow meow'
 // \' - single quote
 // \" - double quote
 // \\ - backslash
+
+// ========== STRING TEMPLATE LITERALS ==========
+
+`I counted ${3 + 4} sheep`; // 'I counted 7 sheep'. Using backtick ``, not ''
+
+let username = 'Ziggy31';
+`Welcome back, ${username}`;
+
+`GAME OVER ${username.toUpperCase()}`;
+
+// PIG EXAMPLE
+let animal = 'pig';
+let sound = 'oink';
+// classic way:
+animal + ' says ' + sound + '!'; // "pig says oink!"
+// using template literals:
+`${animal} says ${sound}!`; // "pig says oink!"
+`${animal} says ${sound.toUpperCase()}!`; // "pig says OINK!"
+
+// CUCUMBA EXAMPLE
+let item = 'cucumbers';
+let price = 1.99;
+let quantity = 4;
+`You bought ${quantity} ${item}, total price: $${price * quantity}`; //"You bought 4 cucumbers, total price: $7.96"
