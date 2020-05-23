@@ -1,3 +1,5 @@
+// ========== STRING METHODS ==========
+
 // indexOf - search inside string. Returns index of first occurrence of specified value
 
 let tvShow = 'catdog';
@@ -31,3 +33,9 @@ annoyingLaugh.replace('teehee', 'haha'); // 'haha so funny! teehee' - replaces t
 
 let greeting = '  meow meow meow            ';
 greeting.trim(); // 'meow meow meow'
+
+// ========== STRING ESCAPE CHARACTERS ==========
+// \n - new line
+// \' - single quote
+// \" - double quote
+// \\ - backslash
