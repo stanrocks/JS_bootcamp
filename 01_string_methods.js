@@ -19,8 +19,15 @@ str.slice(200); // '' -
 str = 'catdog2';
 str.slice(3, -1); // 'dog' - returns string from index 3 to last index minus one
 
-// replace . Returns a new string with first match of a pattern replaced by a replacement. Can replace all by using regexp.
+// replace - replace something to something other inside a string. Returns a new string with first match of a pattern replaced by a replacement. Can replace all by using regexp.
 
 let annoyingLaugh = 'teehee so funny! teehee';
 
 annoyingLaugh.replace('teehee', 'haha'); // 'haha so funny! teehee' - replaces the first instance only
+
+'GARBAGE!'.slice(2).replace('B', ''); // 'GARBAGE!' -> 'RBAGE!' -> 'RAGE!' ('B' replaced with empty string)
+
+// trim - delete spaces at start and end of string. Removes whitespace from both ends of a string. Whitespace in this context is all the whitespace characters (space, tab, no-break space, etc.) and all the line terminator characters (LF, CR, etc.).
+
+let greeting = '  meow meow meow            ';
+greeting.trim(); // 'meow meow meow'
