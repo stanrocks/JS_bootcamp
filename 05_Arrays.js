@@ -60,3 +60,11 @@ const myEggs = [ 'brown', 'brown' ];
 myEggs.push('purple'); // possible
 myEggs[0] = 'green'; // possible
 myEggs = [ 'blue', 'pink' ]; // NO! not possible to change reference to new array
+
+// multidimensional array (nested arrays)
+// prettier-ignore
+const board = [ 
+  [ 'O', null, 'X' ], 
+  [ null, 'X', 'O' ], 
+  [ 'X', 'O', null ] 
+];
