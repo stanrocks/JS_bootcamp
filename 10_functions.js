@@ -35,3 +35,56 @@ function throwDice(numRolls) {
 
 throwDice(2);
 throwDice(6);
+
+// ============= RETURN STATEMENT =============
+
+// No return!
+function add(x, y) {
+	console.log(x + y);
+}
+
+// This version returns the sum of x & y;
+function add(x, y) {
+	return x + y;
+}
+
+// We can capture the return value:
+const total = add(4, 9); //13
+
+// MORE ON RETURN - return breaks execution
+
+function square(x) {
+	return x * x;
+	console.log('ALL DONE!'); //this NEVER runs;
+}
+
+// One way of writing this function
+function isPurple(color) {
+	if (color.toLowerCase() === 'purple') {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// We don't need the else!
+function isPurple(color) {
+	if (color.toLowerCase() === 'purple') {
+		return true;
+	}
+	return false;
+}
+
+// An even shorter way!
+function isPurple(color) {
+	return color.toLowerCase() === 'purple';
+}
+
+function containsPurple(arr) {
+	for (let color of arr) {
+		if (color === 'purple' || color === 'magenta') {
+			return true;
+		}
+	}
+	return false;
+}
