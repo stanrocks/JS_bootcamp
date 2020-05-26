@@ -5,8 +5,11 @@
 // my solution
 function avg(arr) {
 	let total = 0;
-	for (let i = 0; i < arr.length; i++) {
-		total += arr[i];
+	// loop over each num
+	for (let num of arr) {
+		// add them together
+		total += num;
 	}
+	// divide by number of nums
 	return total / arr.length;
 }
