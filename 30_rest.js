@@ -1,5 +1,5 @@
 Math.max(1, 5, 7, 6, 23, 56, 4, 7);
-// but how to pass any number of arguments?
+// but how function can be ready to get to any number of arguments?
 
 //The arguments object is available in every function you write (except arrow functions)
 //It contains all the arguments passed in.
