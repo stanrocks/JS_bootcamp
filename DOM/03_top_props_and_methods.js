@@ -92,3 +92,23 @@ firstLi.nextElementSibling.nextElementSibling; // access to next after next sibl
 
 const thirdLi = firstLi.nextElementSibling.nextElementSibling;
 thirdLi.previousElementSibling; // access to previous sibling (second li element)
+
+// ========= 4. style =========
+
+const h1 = document.querySelector('h1');
+h1.style.color; // '' (empty) - unable to read style unless it's style defined inline
+h1.style.color = 'orchid'; // color is changed to orchid
+
+h1.style.backgroundColor; // in CSS we use background-color, in JS it is not a valid identifier. in JS we have to use camelCase - backgroundColor
+
+// this is how we can change one style at a time
+
+// how to change style for multiple elements:
+const allLis = document.querySelectorAll('li');
+const colors = [ 'red', 'orange', 'yellow', 'green', 'blue', 'purple' ];
+
+allLis.forEach((li, i) => {
+	const color = colors[i];
+	// console.log(el, i);
+	li.style.color = color;
+});
