@@ -11,3 +11,24 @@ const math = {
 
 // To execute multiply:
 math.multiply(5, 9); //45
+
+// Method shorthand syntax:
+const math = {
+	add(x, y) {
+		return x + y;
+	},
+	multiply(x, y) {
+		return x * y;
+	}
+};
+
+// Method shorthand syntax, example 2:
+const auth = {
+	username: 'TommyBot',
+	login() {
+		console.log('LOGGED YOU IN!');
+	},
+	logout() {
+		console.log('GOODBYE');
+	}
+};
