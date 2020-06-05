@@ -21,10 +21,15 @@ class Timer {
 	};
 
 	tick = () => {
-		// subtract 1 sec and put it to input field (which in this case works as output)
-		// calling setter timeRem = calling getter timeRem - 1
-		// no parentheses needed, cause those are called automatically with use of get and set keywords
-		this.timeRemaining = this.timeRemaining - 1;
+		if (this.timeRemaining <= 0) {
+			// stop timer if time ran out
+			this.pause();
+		} else {
+			// subtract 1 sec and put it to input field (which in this case works as output)
+			// calling setter timeRem = calling getter timeRem - 1
+			// no parentheses needed, cause those are called automatically with use of get and set keywords
+			this.timeRemaining = this.timeRemaining - 1;
+		}
 	};
 
 	// get current time from user input area
