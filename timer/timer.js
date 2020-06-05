@@ -21,8 +21,8 @@ class Timer {
 		// run tick once immediately right after start
 		this.tick();
 		// store timer ID inside this.timer
-		// and repeating ticks after 1 sec pause
-		this.interval = setInterval(this.tick, 1000);
+		// and repeating ticks after 50 ms pause (high freq for smooth animation)
+		this.interval = setInterval(this.tick, 50);
 	};
 
 	// pause timer
@@ -39,10 +39,10 @@ class Timer {
 				this.onComplete();
 			}
 		} else {
-			// subtract 1 sec and put it to input field (which in this case works as output)
-			// calling setter timeRem = calling getter timeRem - 1
+			// subtract 0.05 sec and put it to input field (which in this case works as output)
+			// calling setter timeRem = calling getter timeRem - 0.05 s
 			// no parentheses needed, cause those are called automatically with use of get and set keywords
-			this.timeRemaining = this.timeRemaining - 1;
+			this.timeRemaining = this.timeRemaining - 0.05;
 			if (this.onTick) {
 				this.onTick();
 			}
@@ -58,6 +58,6 @@ class Timer {
 	// set value in user input area (update timer with calculated time)
 	set timeRemaining(time) {
 		// set timer to time passed to that setter
-		this.durationInput.value = time;
+		this.durationInput.value = time.toFixed(2);
 	}
 }
