@@ -6,6 +6,8 @@ class Timer {
 		// callbacks are optional
 		if (callbacks) {
 			this.onStart = callbacks.onStart;
+			this.onTick = callbacks.onTick;
+			this.onComplete = callbacks.onComplete;
 		}
 		this.startButton.addEventListener('click', this.start);
 		this.pauseButton.addEventListener('click', this.pause);
@@ -33,11 +35,17 @@ class Timer {
 		if (this.timeRemaining <= 0) {
 			// stop timer if time ran out
 			this.pause();
+			if (this.onComplete) {
+				this.onComplete();
+			}
 		} else {
 			// subtract 1 sec and put it to input field (which in this case works as output)
 			// calling setter timeRem = calling getter timeRem - 1
 			// no parentheses needed, cause those are called automatically with use of get and set keywords
 			this.timeRemaining = this.timeRemaining - 1;
+			if (this.onTick) {
+				this.onTick();
+			}
 		}
 	};
 
@@ -64,6 +72,10 @@ const timer = new Timer(durationInput, startButton, pauseButton, {
 	onStart() {
 		console.log('Timer started');
 	},
-	onTick() {},
-	onComplete() {}
+	onTick() {
+		console.log('Timer just ticked down');
+	},
+	onComplete() {
+		console.log('Timer is completed');
+	}
 });
