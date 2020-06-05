@@ -21,7 +21,10 @@ class Timer {
 	};
 
 	tick = () => {
-		console.log('tick');
+		// convert user timer duration input to float and store it
+		const timeRemaining = parseFloat(this.durationInput.value);
+		// subtract 1 sec and put it to input field (which in this case works as output)
+		this.durationInput.value = timeRemaining - 1;
 	};
 }
 
