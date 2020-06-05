@@ -5,15 +5,24 @@ class Timer {
 		this.pauseButton = pauseButton;
 
 		this.startButton.addEventListener('click', this.start);
+		this.pauseButton.addEventListener('click', this.pause);
 	}
 
 	start = () => {
-		this.importantMethodToCall();
+		// run tick once immediately right after start
+		this.tick();
+		// store timer ID inside this.timer
+		// and repeating ticks after 1 sec pause
+		this.interval = setInterval(this.tick, 1000);
 	};
 
-	importantMethodToCall() {
-		console.log('IMPORTANT THING WAS DONE!!!');
-	}
+	pause = () => {
+		clearInterval(this.interval);
+	};
+
+	tick = () => {
+		console.log('tick');
+	};
 }
 
 const durationInput = document.querySelector('#duration');
