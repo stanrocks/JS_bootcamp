@@ -1,15 +1,21 @@
 class Timer {
-	constructor(durationInput, startButton, pauseButton) {
+	constructor(durationInput, startButton, pauseButton, callbacks) {
 		this.durationInput = durationInput;
 		this.startButton = startButton;
 		this.pauseButton = pauseButton;
-
+		// callbacks are optional
+		if (callbacks) {
+			this.onStart = callbacks.onStart;
+		}
 		this.startButton.addEventListener('click', this.start);
 		this.pauseButton.addEventListener('click', this.pause);
 	}
 
 	// start timer
 	start = () => {
+		if (this.onStart) {
+			this.onStart();
+		}
 		// run tick once immediately right after start
 		this.tick();
 		// store timer ID inside this.timer
@@ -54,4 +60,10 @@ const startButton = document.querySelector('#start');
 const pauseButton = document.querySelector('#pause');
 
 // run new Timer instance
-const timer = new Timer(durationInput, startButton, pauseButton);
+const timer = new Timer(durationInput, startButton, pauseButton, {
+	onStart() {
+		console.log('Timer started');
+	},
+	onTick() {},
+	onComplete() {}
+});
