@@ -21,11 +21,23 @@ class Timer {
 	};
 
 	tick = () => {
-		// convert user timer duration input to float and store it
-		const timeRemaining = parseFloat(this.durationInput.value);
 		// subtract 1 sec and put it to input field (which in this case works as output)
-		this.durationInput.value = timeRemaining - 1;
+		// calling setter timeRem = calling getter timeRem - 1
+		// no parentheses needed, cause those are called automatically with use of get and set keywords
+		this.timeRemaining = this.timeRemaining - 1;
 	};
+
+	// get current time from user input area
+	get timeRemaining() {
+		// get time from user timer duration input. convert to float
+		return parseFloat(this.durationInput.value);
+	}
+
+	// set value in user input area (update timer with calculated time)
+	set timeRemaining(time) {
+		// set timer to time passed to that setter
+		this.durationInput.value = time;
+	}
 }
 
 const durationInput = document.querySelector('#duration');
