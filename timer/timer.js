@@ -16,13 +16,14 @@ class Timer {
 	// start timer
 	start = () => {
 		if (this.onStart) {
-			this.onStart();
+			// once at start pass timeRemaining (defines timer total duration)
+			this.onStart(this.timeRemaining);
 		}
 		// run tick once immediately right after start
 		this.tick();
 		// store timer ID inside this.timer
-		// and repeating ticks after 50 ms pause (high freq for smooth animation)
-		this.interval = setInterval(this.tick, 50);
+		// and repeating ticks after 20 ms pause (high freq for smooth animation)
+		this.interval = setInterval(this.tick, 20);
 	};
 
 	// pause timer
@@ -39,12 +40,13 @@ class Timer {
 				this.onComplete();
 			}
 		} else {
-			// subtract 0.05 sec and put it to input field (which in this case works as output)
+			// subtract 0.02 sec and put it to input field (which in this case works as output)
 			// calling setter timeRem = calling getter timeRem - 0.05 s
 			// no parentheses needed, cause those are called automatically with use of get and set keywords
-			this.timeRemaining = this.timeRemaining - 0.05;
+			this.timeRemaining = this.timeRemaining - 0.02;
 			if (this.onTick) {
-				this.onTick();
+				// with every tick pass time remaining
+				this.onTick(this.timeRemaining);
 			}
 		}
 	};

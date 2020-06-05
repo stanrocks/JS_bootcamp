@@ -10,16 +10,18 @@ const perimeter = circle.getAttribute('r') * 2 * Math.PI;
 // set stroke-dasharray equals to perimeter
 circle.setAttribute('stroke-dasharray', perimeter);
 
-let currentOffset = 0;
+// create global variable to pass between timer methods
+let duration;
 
 // run new Timer instance
 const timer = new Timer(durationInput, startButton, pauseButton, {
-	onStart() {
-		console.log('Timer started');
+	onStart(totalDuration) {
+		// timer total duration (set by user at start)
+		duration = totalDuration;
 	},
-	onTick() {
-		circle.setAttribute('stroke-dashoffset', currentOffset);
-		currentOffset = currentOffset - 1;
+	onTick(timeRemaining) {
+		// calculate offset with formula
+		circle.setAttribute('stroke-dashoffset', perimeter * timeRemaining / duration - perimeter);
 	},
 	onComplete() {
 		console.log('Timer is completed');
