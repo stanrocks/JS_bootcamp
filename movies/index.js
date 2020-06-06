@@ -1,19 +1,3 @@
-const fetchData = async (searchTerm) => {
-	const response = await axios.get('http://www.omdbapi.com/', {
-		params: {
-			apikey: 'c4a8ca95',
-			s: searchTerm
-		}
-	});
-
-	// if no result found - return empty arr
-	if (response.data.Error) {
-		return [];
-	}
-
-	return response.data.Search;
-};
-
 // calling autocomplete with config that fits movie API
 createAutoComplete({
 	// output area
@@ -27,11 +11,28 @@ createAutoComplete({
     ${movie.Title} (${movie.Year})
     `;
 	},
+	// get more info about that particular movie
 	onOptionSelect(movie) {
 		onMovieSelect(movie);
 	},
+	// put movie title to input
 	inputValue(movie) {
 		return movie.Title;
+	},
+	// search request to OMDB API
+	async fetchData(searchTerm) {
+		const response = await axios.get('http://www.omdbapi.com/', {
+			params: {
+				apikey: 'c4a8ca95',
+				s: searchTerm
+			}
+		});
+		// if no result found - return empty arr
+		if (response.data.Error) {
+			return [];
+		}
+		// return response from API
+		return response.data.Search;
 	}
 });
 

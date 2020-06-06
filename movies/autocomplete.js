@@ -1,7 +1,7 @@
-const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue }) => {
+const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue, fetchData }) => {
 	// create output area (root) with html-structure
 	root.innerHTML = `
-  <label><b>Search For a Movie</b></label>
+  <label><b>Search</b></label>
   <input class="input" />
   <div class="dropdown">
     <div class="dropdown-menu">
@@ -18,9 +18,9 @@ const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue }) 
 	// async mode since gonna use promise
 	const onInput = async (event) => {
 		// await for promise to be resolved
-		const movies = await fetchData(event.target.value);
-		// hide dropdown and stop function if no movies found
-		if (!movies.length) {
+		const items = await fetchData(event.target.value);
+		// hide dropdown and stop function if no items found
+		if (!items.length) {
 			dropdown.classList.remove('is-active');
 			return;
 		}
@@ -28,23 +28,25 @@ const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue }) 
 		resultsWrapper.innerHTML = '';
 		// make dropdown visible
 		dropdown.classList.add('is-active');
-		// create new div with poster and title for every movie
-		for (let movie of movies) {
+		// render output for every item
+		for (let item of items) {
 			const option = document.createElement('a');
-
+			// show dropdown
 			option.classList.add('dropdown-item');
-			option.innerHTML = renderOption(movie);
+			// render HTML structure
+			option.innerHTML = renderOption(item);
 
-			// movie selection
+			// item selection
 			option.addEventListener('click', () => {
 				// hide dropdown
 				dropdown.classList.remove('is-active');
-				// put movie title to input
-				input.value = inputValue(movie);
-				// get more info about that particular movie
-				onOptionSelect(movie);
+				// put selected item name to input
+				input.value = inputValue(item);
+				// run on select
+				onOptionSelect(item);
 			});
-			// put that option to results output area
+
+			// append every found item to results output area (dropdown)
 			resultsWrapper.appendChild(option);
 		}
 	};
