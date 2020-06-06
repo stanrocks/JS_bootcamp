@@ -35,6 +35,11 @@ const resultsWrapper = document.querySelector('.results');
 const onInput = async (event) => {
 	// await for promise to be resolved
 	const movies = await fetchData(event.target.value);
+	// hide dropdown and stop function if no movies found
+	if (!movies.length) {
+		dropdown.classList.remove('is-active');
+		return;
+	}
 	// clear results (from previous search)
 	resultsWrapper.innerHTML = '';
 	// make dropdown visible
