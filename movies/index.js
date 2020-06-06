@@ -5,13 +5,14 @@ const fetchData = async (searchTerm) => {
 			s: searchTerm
 		}
 	});
-	console.log(response.data);
+	return response.data.Search;
 };
 
 const input = document.querySelector('input');
 
-const onInput = (event) => {
-	fetchData(event.target.value);
+const onInput = async (event) => {
+	const movies = await fetchData(event.target.value);
+	console.log(movies);
 };
 // debounce user input (delay 0.5 sec), then get data from API
 input.addEventListener('input', debounce(onInput, 500));
