@@ -34,15 +34,18 @@ const resultsWrapper = document.querySelector('.results');
 const onInput = async (event) => {
 	// await for promise to be resolved
 	const movies = await fetchData(event.target.value);
+	// make dropdown visible
+	dropdown.classList.add('is-active');
 	// create new div with poster and title for every movie
 	for (let movie of movies) {
-		const div = document.createElement('div');
-		div.innerHTML = `
+		const option = document.createElement('a');
+		option.classList.add('dropdown-item');
+		option.innerHTML = `
     <img src="${movie.Poster}" />
-    <h1>${movie.Title}</h1>
+    ${movie.Title}
     `;
-		// put that div to page target area
-		document.querySelector('#target').appendChild(div);
+		// put that option to results output area
+		resultsWrapper.appendChild(option);
 	}
 };
 // debounce user input (delay 0.5 sec), then run onInput func (get data from API)
