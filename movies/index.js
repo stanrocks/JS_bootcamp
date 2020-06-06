@@ -1,7 +1,6 @@
-// calling autocomplete with config that fits movie API
-createAutoComplete({
-	// output area
-	root: document.querySelector('.autocomplete'),
+// config for movie search
+// common autocomplete config properties
+const autoCompleteConfig = {
 	// render options
 	renderOption(movie) {
 		// make src empty if get no poster from API (N/A). else - put poster url into img src
@@ -34,6 +33,24 @@ createAutoComplete({
 		// return response from API
 		return response.data.Search;
 	}
+};
+
+// AutoComplete - instance #1
+createAutoComplete({
+	// use common autocomplete config properties
+	...autoCompleteConfig,
+	// add to common config unique properties
+	// define output area
+	root: document.querySelector('#left-autocomplete')
+});
+
+// AutoComplete - instance #2
+createAutoComplete({
+	// use common autocomplete config properties
+	...autoCompleteConfig,
+	// add to common config unique properties
+	// define output area
+	root: document.querySelector('#right-autocomplete')
 });
 
 // get details about selected movie from API

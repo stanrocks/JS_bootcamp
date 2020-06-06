@@ -50,10 +50,11 @@ const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue, fe
 			resultsWrapper.appendChild(option);
 		}
 	};
+
 	// debounce user input (delay 0.5 sec), then run onInput func (get data from API)
 	input.addEventListener('input', debounce(onInput, 500));
 
-	// close dropdown
+	// close dropdown if clicked outside search area
 	document.addEventListener('click', (event) => {
 		// shows element that's been clicked by user
 		// console.log(event.target);
