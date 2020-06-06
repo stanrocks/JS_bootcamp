@@ -5,6 +5,12 @@ const fetchData = async (searchTerm) => {
 			s: searchTerm
 		}
 	});
+
+	// if no result found - return empty arr
+	if (response.data.Error) {
+		return [];
+	}
+
 	return response.data.Search;
 };
 
