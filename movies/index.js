@@ -34,14 +34,18 @@ const resultsWrapper = document.querySelector('.results');
 const onInput = async (event) => {
 	// await for promise to be resolved
 	const movies = await fetchData(event.target.value);
+	// clear results (from previous search)
+	resultsWrapper.innerHTML = '';
 	// make dropdown visible
 	dropdown.classList.add('is-active');
 	// create new div with poster and title for every movie
 	for (let movie of movies) {
 		const option = document.createElement('a');
+		// make src empty if get no poster from API (N/A). else - put poster url into img src
+		const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
 		option.classList.add('dropdown-item');
 		option.innerHTML = `
-    <img src="${movie.Poster}" />
+    <img src="${imgSrc}" />
     ${movie.Title}
     `;
 		// put that option to results output area
