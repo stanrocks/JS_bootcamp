@@ -10,18 +10,25 @@ const fetchData = async (searchTerm) => {
 
 const input = document.querySelector('input');
 
-let timeoutId;
-
-// filtering user input. wait while user typing, then fetch
-const onInput = (event) => {
-	// after second or next inputs - reset timer
-	if (timeoutId) {
-		clearTimeout(timeoutId);
-	}
-	// if timer goes out - fetch data
-	timeoutId = setTimeout(() => {
-		fetchData(event.target.value);
-	}, 1000);
+// debounce an input - delay (default = 1 sec) on input
+const debounce = (func, delay = 1000) => {
+	let timeoutId;
+	// take all possible arguments
+	return (...args) => {
+		// reset timer after second or more inputs
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+		}
+		// run function if timer goes out
+		timeoutId = setTimeout(() => {
+			// passing all arguments inside function
+			func.apply(null, args);
+		}, delay);
+	};
 };
 
-input.addEventListener('input', onInput);
+const onInput = (event) => {
+	fetchData(event.target.value);
+};
+// debounce user input (delay 0.5 sec), then get data from API
+input.addEventListener('input', debounce(onInput, 500));
