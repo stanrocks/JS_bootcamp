@@ -1,4 +1,4 @@
-const createAutoComplete = ({ root, renderOption }) => {
+const createAutoComplete = ({ root, renderOption, onOptionSelect, inputValue }) => {
 	// create output area (root) with html-structure
 	root.innerHTML = `
   <label><b>Search For a Movie</b></label>
@@ -31,7 +31,7 @@ const createAutoComplete = ({ root, renderOption }) => {
 		// create new div with poster and title for every movie
 		for (let movie of movies) {
 			const option = document.createElement('a');
-			// make src empty if get no poster from API (N/A). else - put poster url into img src
+
 			option.classList.add('dropdown-item');
 			option.innerHTML = renderOption(movie);
 
@@ -40,9 +40,9 @@ const createAutoComplete = ({ root, renderOption }) => {
 				// hide dropdown
 				dropdown.classList.remove('is-active');
 				// put movie title to input
-				input.value = movie.Title;
+				input.value = inputValue(movie);
 				// get more info about that particular movie
-				onMovieSelect(movie);
+				onOptionSelect(movie);
 			});
 			// put that option to results output area
 			resultsWrapper.appendChild(option);

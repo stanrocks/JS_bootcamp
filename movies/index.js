@@ -14,14 +14,24 @@ const fetchData = async (searchTerm) => {
 	return response.data.Search;
 };
 
+// calling autocomplete with config that fits movie API
 createAutoComplete({
+	// output area
 	root: document.querySelector('.autocomplete'),
+	// render options
 	renderOption(movie) {
+		// make src empty if get no poster from API (N/A). else - put poster url into img src
 		const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
 		return `
     <img src="${imgSrc}" />
     ${movie.Title} (${movie.Year})
     `;
+	},
+	onOptionSelect(movie) {
+		onMovieSelect(movie);
+	},
+	inputValue(movie) {
+		return movie.Title;
 	}
 });
 
