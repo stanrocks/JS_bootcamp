@@ -14,6 +14,7 @@ const fetchData = async (searchTerm) => {
 	return response.data.Search;
 };
 
+// create output area (root) with html-structure
 const root = document.querySelector('.autocomplete');
 root.innerHTML = `
   <label><b>Search For a Movie</b></label>
@@ -54,3 +55,13 @@ const onInput = async (event) => {
 };
 // debounce user input (delay 0.5 sec), then run onInput func (get data from API)
 input.addEventListener('input', debounce(onInput, 500));
+
+// close dropdown
+document.addEventListener('click', (event) => {
+	// shows element that's been clicked by user
+	// console.log(event.target);
+	// hide dropdown menu if clicked outside root-area (area with input and dropdown)
+	if (!root.contains(event.target)) {
+		dropdown.classList.remove('is-active');
+	}
+});
