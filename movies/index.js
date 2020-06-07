@@ -12,6 +12,8 @@ const autoCompleteConfig = {
 	},
 	// get more info about that particular movie
 	onOptionSelect(movie) {
+		// hide tutorial element
+		document.querySelector('.tutorial').classList.add('is-hidden');
 		onMovieSelect(movie);
 	},
 	// put movie title to input
