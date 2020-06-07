@@ -1,6 +1,9 @@
 // create matter object consist of matter elements
 const { Engine, Render, Runner, World, Bodies, MouseConstraint, Mouse } = Matter;
 
+const width = 800;
+const height = 600;
+
 // create new engine
 const engine = Engine.create();
 
@@ -15,8 +18,10 @@ const render = Render.create({
 	engine: engine,
 	// define options - window size
 	options: {
-		width: 800,
-		height: 600
+		// get solid shapes, not transparent
+		wireframes: false,
+		width,
+		height
 	}
 });
 
@@ -55,5 +60,21 @@ const walls = [
 
 World.add(world, walls);
 
-// Create and add rectangle
-World.add(world, Bodies.rectangle(200, 200, 50, 50));
+// Random Shapes
+for (let i = 0; i < 50; i++) {
+	if (Math.random() > 0.5) {
+		// Create and add rectangle in random place
+		World.add(world, Bodies.rectangle(Math.random() * width, Math.random() * height, 50, 50));
+	} else {
+		// Create and add circle in random place (x, y, radius, )
+		World.add(
+			world,
+			Bodies.circle(Math.random() * width, Math.random() * height, 35, {
+				render: {
+					// define color instead of default colors
+					fillStyle: 'green'
+				}
+			})
+		);
+	}
+}
