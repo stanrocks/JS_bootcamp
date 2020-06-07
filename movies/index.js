@@ -98,7 +98,28 @@ const onMovieSelect = async (movie, summaryElement, side) => {
 };
 
 const runComparison = () => {
-	console.log('Time for comparison');
+	// make arrays of html elements that consist statistics for both movies
+	const leftSideStats = document.querySelectorAll('#left-summary .notification');
+	const rightSideStats = document.querySelectorAll('#right-summary .notification');
+
+	// compare every html element (stat)
+	leftSideStats.forEach((leftStat, index) => {
+		// for every stat of left move fine corresponding stat of right movie
+		const rightStat = rightSideStats[index];
+		// console.log(leftStat, rightStat);
+		// get data from 'data-value' attribute of those html elements
+		const leftSideValue = leftStat.dataset.value;
+		const rightSideValue = rightStat.dataset.value;
+
+		// change color of html element depending on value
+		if (rightSideValue > leftSideValue) {
+			leftStat.classList.remove('is-primary');
+			leftStat.classList.add('is-warning');
+		} else {
+			rightStat.classList.remove('is-primary');
+			rightStat.classList.add('is-warning');
+		}
+	});
 };
 
 const movieTemplate = (movieDetail) => {
