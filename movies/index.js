@@ -108,14 +108,14 @@ const runComparison = () => {
 		const rightStat = rightSideStats[index];
 		// console.log(leftStat, rightStat);
 		// get data from 'data-value' attribute of those html elements
-		const leftSideValue = leftStat.dataset.value;
-		const rightSideValue = rightStat.dataset.value;
+		const leftSideValue = parseInt(leftStat.dataset.value);
+		const rightSideValue = parseInt(rightStat.dataset.value);
 
 		// change color of html element depending on value
 		if (rightSideValue > leftSideValue) {
 			leftStat.classList.remove('is-primary');
 			leftStat.classList.add('is-warning');
-		} else {
+		} else if (rightSideValue < leftSideValue) {
 			rightStat.classList.remove('is-primary');
 			rightStat.classList.add('is-warning');
 		}
