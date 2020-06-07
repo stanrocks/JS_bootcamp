@@ -10,12 +10,7 @@ const autoCompleteConfig = {
     ${movie.Title} (${movie.Year})
     `;
 	},
-	// get more info about that particular movie
-	onOptionSelect(movie) {
-		// hide tutorial element
-		document.querySelector('.tutorial').classList.add('is-hidden');
-		onMovieSelect(movie);
-	},
+
 	// put movie title to input
 	inputValue(movie) {
 		return movie.Title;
@@ -43,7 +38,13 @@ createAutoComplete({
 	...autoCompleteConfig,
 	// add to common config unique properties
 	// define output area
-	root: document.querySelector('#left-autocomplete')
+	root: document.querySelector('#left-autocomplete'),
+	// get more info about that particular movie
+	onOptionSelect(movie) {
+		// hide tutorial element
+		document.querySelector('.tutorial').classList.add('is-hidden');
+		onMovieSelect(movie, document.querySelector('#left-summary'), 'left');
+	}
 });
 
 // AutoComplete - instance #2
@@ -52,11 +53,21 @@ createAutoComplete({
 	...autoCompleteConfig,
 	// add to common config unique properties
 	// define output area
-	root: document.querySelector('#right-autocomplete')
+	root: document.querySelector('#right-autocomplete'),
+	// get more info about that particular movie
+	onOptionSelect(movie) {
+		// hide tutorial element
+		document.querySelector('.tutorial').classList.add('is-hidden');
+		onMovieSelect(movie, document.querySelector('#right-summary'), 'right');
+	}
 });
 
+// vars to store movies to compare
+let leftMovie;
+let rightMovie;
+
 // get details about selected movie from API
-const onMovieSelect = async (movie) => {
+const onMovieSelect = async (movie, summaryElement, side) => {
 	// check how movie object looks like
 	// console.log(movie);
 	// fetch data on selected movie
@@ -70,10 +81,53 @@ const onMovieSelect = async (movie) => {
 	// console.log(response.data);
 
 	// render response (movie details) in summary area
-	document.querySelector('#summary').innerHTML = movieTemplate(response.data);
+	summaryElement.innerHTML = movieTemplate(response.data);
+
+	// store response for particular search side
+	if (side === 'left') {
+		leftMovie = response.data;
+	}
+	if (side === 'right') {
+		rightMovie = response.data;
+	}
+
+	// if response exist for both searches - let's compare
+	if (leftMovie && rightMovie) {
+		runComparison();
+	}
+};
+
+const runComparison = () => {
+	console.log('Time for comparison');
 };
 
 const movieTemplate = (movieDetail) => {
+	// parse details
+	// convert box office ('$629,000,000' -> 629000000)
+	// delete $ sign and commas and convert string to int
+	const dollars = parseInt(movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, ''));
+	// convert metascore string to int
+	const metascore = parseInt(movieDetail.Metascore);
+	// convert imdbRating string to float
+	const imdbRating = parseFloat(movieDetail.imdbRating);
+	// delete commas and convert string to int ('1,254,123' -> 1254123)
+	const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
+	// check parsing results
+	// console.log(dollars, metascore, imdbRating, imdbVotes);
+
+	// split awards string to array of words and check if word is a number
+	const awards = movieDetail.Awards.split(' ').reduce((prev, word) => {
+		const value = parseInt(word);
+		if (isNaN(value)) {
+			return prev;
+		} else {
+			// if word is a number - sum up with previous number
+			return prev + value;
+		}
+	}, 0);
+	// check how awards counted
+	// console.log(awards);
+
 	return `
   <article class="media">
     <figure class="media-left"> 
@@ -89,23 +143,23 @@ const movieTemplate = (movieDetail) => {
       </div>
     </div>
   </article>
-  <article class="notification is-primary">
+  <article data-value=${awards} class="notification is-primary">
     <p class="title">${movieDetail.Awards}</p>
     <p class="subtitle">Awards</p>
   </article>
-  <article class="notification is-primary">
+  <article data-value=${dollars} class="notification is-primary">
     <p class="title">${movieDetail.BoxOffice}</p>
     <p class="subtitle">Box Office</p>
   </article>
-  <article class="notification is-primary">
+  <article data-value=${metascore} class="notification is-primary">
     <p class="title">${movieDetail.Metascore}</p>
     <p class="subtitle">Metascore</p>
   </article>
-  <article class="notification is-primary">
+  <article data-value=${imdbRating} class="notification is-primary">
     <p class="title">${movieDetail.imdbRating}</p>
     <p class="subtitle">IMDB Rating</p>
   </article>
-  <article class="notification is-primary">
+  <article data-value=${imdbVotes} class="notification is-primary">
     <p class="title">${movieDetail.imdbVotes}</p>
     <p class="subtitle">IMDB Votes</p>
   </article>
