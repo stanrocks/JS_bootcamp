@@ -1,5 +1,5 @@
 // create matter object consist of matter elements
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, MouseConstraint, Mouse } = Matter;
 
 // create new engine
 const engine = Engine.create();
@@ -24,6 +24,14 @@ const render = Render.create({
 Render.run(render);
 Runner.run(Runner.create(), engine);
 
+// Mouse clicking and dragging support
+World.add(
+	world,
+	MouseConstraint.create(engine, {
+		mouse: Mouse.create(render.canvas)
+	})
+);
+
 // // create shape (200,200 - position of rectangle center, 50,50 - size)
 // const shape = Bodies.rectangle(200, 200, 50, 50, {
 // 	// rectangle is static and is not affected by gravity
@@ -47,4 +55,5 @@ const walls = [
 
 World.add(world, walls);
 
+// Create and add rectangle
 World.add(world, Bodies.rectangle(200, 200, 50, 50));
