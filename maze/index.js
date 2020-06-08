@@ -2,7 +2,7 @@
 const { Engine, Render, Runner, World, Bodies } = Matter;
 
 // maze generation config
-const cells = 3; // for vertical and horizontal
+const cells = 5; // for vertical and horizontal
 const width = 600;
 const height = 600;
 const unitLength = width / cells;
