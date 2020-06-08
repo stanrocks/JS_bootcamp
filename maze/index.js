@@ -2,7 +2,7 @@
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
 // maze generation config
-const cells = 3; // for vertical and horizontal
+const cells = 6; // for vertical and horizontal
 const width = 600;
 const height = 600;
 const unitLength = width / cells;
@@ -173,6 +173,7 @@ horizontals.forEach((row, rowIndex) => {
 			unitLength,
 			5,
 			{
+				label: 'wall',
 				isStatic: true
 			}
 		);
@@ -194,6 +195,7 @@ verticals.forEach((row, rowIndex) => {
 			5,
 			unitLength,
 			{
+				label: 'wall',
 				isStatic: true
 			}
 		);
@@ -251,7 +253,13 @@ Events.on(engine, 'collisionStart', (event) => {
 
 		// user win if bodies with labels collide
 		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
-			console.log('User won!');
+			// console.log('User won!');
+			world.gravity.y = 1;
+			world.bodies.forEach((body) => {
+				if (body.label === 'wall') {
+					Body.setStatic(body, false);
+				}
+			});
 		}
 	});
 });
