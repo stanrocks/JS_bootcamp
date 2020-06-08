@@ -2,8 +2,8 @@
 const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
 // maze generation config
-const cellsHorizontal = 4;
-const cellsVertical = 3;
+const cellsHorizontal = 19;
+const cellsVertical = 10;
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -26,7 +26,7 @@ const render = Render.create({
 	// define options - window size
 	options: {
 		// get solid shapes, not transparent
-		// wireframes: false,
+		wireframes: false,
 		width,
 		height
 	}
@@ -177,7 +177,10 @@ horizontals.forEach((row, rowIndex) => {
 			5,
 			{
 				label: 'wall',
-				isStatic: true
+				isStatic: true,
+				render: {
+					fillStyle: 'firebrick'
+				}
 			}
 		);
 		// draw calculated horizontal wall
@@ -199,7 +202,10 @@ verticals.forEach((row, rowIndex) => {
 			unitLengthY,
 			{
 				label: 'wall',
-				isStatic: true
+				isStatic: true,
+				render: {
+					fillStyle: 'darkred'
+				}
 			}
 		);
 		// draw calculated vertical wall
@@ -210,14 +216,20 @@ verticals.forEach((row, rowIndex) => {
 // 3.1. Draw goal
 const goal = Bodies.rectangle(width - unitLengthX / 2, height - unitLengthY / 2, unitLengthX * 0.7, unitLengthY * 0.7, {
 	label: 'goal',
-	isStatic: true
+	isStatic: true,
+	render: {
+		fillStyle: 'limegreen'
+	}
 });
 World.add(world, goal);
 
 // 3.2. Draw ball (player avatar)
 const ballRadius = Math.min(unitLengthX, unitLengthY) / 4;
 const ball = Bodies.circle(unitLengthX / 2, unitLengthY / 2, ballRadius, {
-	label: 'ball'
+	label: 'ball',
+	render: {
+		fillStyle: 'deepskyblue'
+	}
 });
 World.add(world, ball);
 
@@ -257,6 +269,7 @@ Events.on(engine, 'collisionStart', (event) => {
 
 		// user win if bodies with labels collide
 		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
+			document.querySelector('.winner').classList.remove('hidden');
 			// console.log('User won!');
 			world.gravity.y = 1;
 			world.bodies.forEach((body) => {
