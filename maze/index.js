@@ -19,7 +19,7 @@ const render = Render.create({
 	// define options - window size
 	options: {
 		// get solid shapes, not transparent
-		wireframes: false,
+		// wireframes: false,
 		width,
 		height
 	}
@@ -42,3 +42,23 @@ const walls = [
 ];
 
 World.add(world, walls);
+
+// Maze generation
+// create 2d array (3 * 3)
+
+// // option 1
+// const grid = [];
+// for (let i = 0; i < 3; i++) {
+// 	grid.push([]);
+// 	for (let j = 0; j < 3; j++) {
+// 		grid[i].push(false);
+// 	}
+// }
+
+// option 2
+// Create array of 3 'null' values (doesn't really matter what is there),
+// then replace each value with array of 3 'false' values.
+// First is array of rows, second - columns
+const grid = Array(3).fill(null).map(() => Array(3).fill(false));
+
+console.log(grid);
