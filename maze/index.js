@@ -5,6 +5,7 @@ const { Engine, Render, Runner, World, Bodies } = Matter;
 const cells = 3; // for vertical and horizontal
 const width = 600;
 const height = 600;
+const unitLength = width / cells;
 
 // create new engine
 const engine = Engine.create();
@@ -153,6 +154,49 @@ const stepThroughCell = (row, column) => {
 	}
 };
 
-// Initiate from starting position
+// Initiate path-generation from starting position
 stepThroughCell(startRow, startColumn);
 // console.log(grid);
+
+// 2.5. Draw walls using generated paths
+horizontals.forEach((row, rowIndex) => {
+	// true means no wall, false - draw wall
+	row.forEach((open, columnIndex) => {
+		if (open) {
+			return;
+		}
+		// calculate position for horizontal wall
+		const wall = Bodies.rectangle(
+			columnIndex * unitLength + unitLength / 2,
+			rowIndex * unitLength + unitLength,
+			unitLength,
+			10,
+			{
+				isStatic: true
+			}
+		);
+		// draw calculated horizontal wall
+		World.add(world, wall);
+	});
+});
+
+verticals.forEach((row, rowIndex) => {
+	// true means no wall, false - draw wall
+	row.forEach((open, columnIndex) => {
+		if (open) {
+			return;
+		}
+		// calculate position for vertical wall
+		const wall = Bodies.rectangle(
+			columnIndex * unitLength + unitLength,
+			rowIndex * unitLength + unitLength / 2,
+			10,
+			unitLength,
+			{
+				isStatic: true
+			}
+		);
+		// draw calculated vertical wall
+		World.add(world, wall);
+	});
+});
