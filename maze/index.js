@@ -1,8 +1,8 @@
 // create matter object consist of matter elements
-const { Engine, Render, Runner, World, Bodies } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body } = Matter;
 
 // maze generation config
-const cells = 5; // for vertical and horizontal
+const cells = 3; // for vertical and horizontal
 const width = 600;
 const height = 600;
 const unitLength = width / cells;
@@ -35,13 +35,13 @@ Runner.run(Runner.create(), engine);
 // Walls
 const walls = [
 	// top
-	Bodies.rectangle(width / 2, 0, width, 40, { isStatic: true }),
+	Bodies.rectangle(width / 2, 0, width, 3, { isStatic: true }),
 	// bottom
-	Bodies.rectangle(width / 2, height, width, 40, { isStatic: true }),
+	Bodies.rectangle(width / 2, height, width, 3, { isStatic: true }),
 	// left
-	Bodies.rectangle(0, height / 2, 40, height, { isStatic: true }),
+	Bodies.rectangle(0, height / 2, 3, height, { isStatic: true }),
 	// right
-	Bodies.rectangle(width, height / 2, 40, height, { isStatic: true })
+	Bodies.rectangle(width, height / 2, 3, height, { isStatic: true })
 ];
 
 World.add(world, walls);
@@ -62,7 +62,7 @@ const shuffle = (arr) => {
 	return arr;
 };
 
-// 2.1 Grid generation - cell itself - to store 'have been visited'
+// 2.1. Grid generation - cell itself - to store 'have been visited'
 // create 2d array (3 * 3)
 
 // Create array of 3 'null' values (doesn't really matter what is there),
@@ -71,7 +71,7 @@ const shuffle = (arr) => {
 const grid = Array(cells).fill(null).map(() => Array(cells).fill(false));
 // console.log(grid);
 
-// 2.2 Grid borders generation - cell edges
+// 2.2. Grid borders generation - cell edges
 // Verticals have 3 rows, 2 columns
 // Horizontals have 2 rows, 3 columns
 
@@ -170,7 +170,7 @@ horizontals.forEach((row, rowIndex) => {
 			columnIndex * unitLength + unitLength / 2,
 			rowIndex * unitLength + unitLength,
 			unitLength,
-			10,
+			5,
 			{
 				isStatic: true
 			}
@@ -190,7 +190,7 @@ verticals.forEach((row, rowIndex) => {
 		const wall = Bodies.rectangle(
 			columnIndex * unitLength + unitLength,
 			rowIndex * unitLength + unitLength / 2,
-			10,
+			5,
 			unitLength,
 			{
 				isStatic: true
@@ -199,4 +199,37 @@ verticals.forEach((row, rowIndex) => {
 		// draw calculated vertical wall
 		World.add(world, wall);
 	});
+});
+
+// 3.1. Draw goal
+const goal = Bodies.rectangle(width - unitLength / 2, height - unitLength / 2, unitLength * 0.7, unitLength * 0.7, {
+	isStatic: true
+});
+World.add(world, goal);
+
+// 3.2. Draw ball (player avatar)
+const ball = Bodies.circle(unitLength / 2, unitLength / 2, unitLength / 4);
+World.add(world, ball);
+
+// 4.1. Player input
+document.addEventListener('keydown', (event) => {
+	const { x, y } = ball.velocity;
+	// console.log(x, y);
+
+	if (event.keyCode === 87) {
+		// console.log('move ball up');
+		Body.setVelocity(ball, { x, y: y - 5 });
+	}
+	if (event.keyCode === 68) {
+		// console.log('move ball right');
+		Body.setVelocity(ball, { x: x + 5, y });
+	}
+	if (event.keyCode === 83) {
+		// console.log('move ball down');
+		Body.setVelocity(ball, { x, y: y + 5 });
+	}
+	if (event.keyCode === 65) {
+		// console.log('move ball left');
+		Body.setVelocity(ball, { x: x - 5, y });
+	}
 });
