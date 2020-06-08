@@ -1,5 +1,5 @@
 // create matter object consist of matter elements
-const { Engine, Render, Runner, World, Bodies, Body } = Matter;
+const { Engine, Render, Runner, World, Bodies, Body, Events } = Matter;
 
 // maze generation config
 const cells = 3; // for vertical and horizontal
@@ -9,6 +9,7 @@ const unitLength = width / cells;
 
 // create new engine
 const engine = Engine.create();
+engine.world.gravity.y = 0; // disable falling down
 
 // access to world created with engine
 const { world } = engine;
@@ -203,15 +204,18 @@ verticals.forEach((row, rowIndex) => {
 
 // 3.1. Draw goal
 const goal = Bodies.rectangle(width - unitLength / 2, height - unitLength / 2, unitLength * 0.7, unitLength * 0.7, {
+	label: 'goal',
 	isStatic: true
 });
 World.add(world, goal);
 
 // 3.2. Draw ball (player avatar)
-const ball = Bodies.circle(unitLength / 2, unitLength / 2, unitLength / 4);
+const ball = Bodies.circle(unitLength / 2, unitLength / 2, unitLength / 4, {
+	label: 'ball'
+});
 World.add(world, ball);
 
-// 4.1. Player input
+// 4. Player input
 document.addEventListener('keydown', (event) => {
 	const { x, y } = ball.velocity;
 	// console.log(x, y);
@@ -232,4 +236,22 @@ document.addEventListener('keydown', (event) => {
 		// console.log('move ball left');
 		Body.setVelocity(ball, { x: x - 5, y });
 	}
+});
+
+// 5. Win Condition
+Events.on(engine, 'collisionStart', (event) => {
+	event.pairs.forEach((collision) => {
+		// console.log(collision);
+
+		// labels of player avatar and goal that should collide for win
+		const labels = [
+			'ball',
+			'goal'
+		];
+
+		// user win if bodies with labels collide
+		if (labels.includes(collision.bodyA.label) && labels.includes(collision.bodyB.label)) {
+			console.log('User won!');
+		}
+	});
 });
