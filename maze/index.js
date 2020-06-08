@@ -1,6 +1,8 @@
 // create matter object consist of matter elements
 const { Engine, Render, Runner, World, Bodies } = Matter;
 
+// maze generation config
+const cells = 5; // for vertical and horizontal
 const width = 600;
 const height = 600;
 
@@ -51,7 +53,7 @@ World.add(world, walls);
 // Create array of 3 'null' values (doesn't really matter what is there),
 // then replace each value with array of 3 'false' values.
 // First is array of rows, second - columns
-const grid = Array(3).fill(null).map(() => Array(3).fill(false));
+const grid = Array(cells).fill(null).map(() => Array(cells).fill(false));
 // console.log(grid);
 
 // 2.2 Grid borders generation - square edges
@@ -62,6 +64,6 @@ const grid = Array(3).fill(null).map(() => Array(3).fill(false));
 // _|_|_
 //  | |
 
-const verticals = Array(3).fill(null).map(() => Array(2).fill(false));
-const horizontals = Array(2).fill(null).map(() => Array(3).fill(false));
+const verticals = Array(cells).fill(null).map(() => Array(cells - 1).fill(false));
+const horizontals = Array(cells - 1).fill(null).map(() => Array(cells).fill(false));
 // console.log(verticals, horizontals);
