@@ -43,22 +43,25 @@ const walls = [
 
 World.add(world, walls);
 
-// Maze generation
+// 2. Maze generation
+
+// 2.1 Grid generation - square itself - to store 'have been here before'
 // create 2d array (3 * 3)
 
-// // option 1
-// const grid = [];
-// for (let i = 0; i < 3; i++) {
-// 	grid.push([]);
-// 	for (let j = 0; j < 3; j++) {
-// 		grid[i].push(false);
-// 	}
-// }
-
-// option 2
 // Create array of 3 'null' values (doesn't really matter what is there),
 // then replace each value with array of 3 'false' values.
 // First is array of rows, second - columns
 const grid = Array(3).fill(null).map(() => Array(3).fill(false));
+// console.log(grid);
 
-console.log(grid);
+// 2.2 Grid borders generation - square edges
+// Verticals have 3 rows, 2 columns
+// Horizontals have 2 rows, 3 columns
+
+// _|_|_
+// _|_|_
+//  | |
+
+const verticals = Array(3).fill(null).map(() => Array(2).fill(false));
+const horizontals = Array(2).fill(null).map(() => Array(3).fill(false));
+// console.log(verticals, horizontals);
