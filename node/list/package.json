@@ -1,11 +1,14 @@
 {
-  "name": "nls",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Stan Rocks",
-  "license": "MIT"
+	"name": "list",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Stan Rocks",
+	"license": "MIT",
+	"bin": {
+		"nls": "index.js"
+	}
 }
