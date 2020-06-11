@@ -51,20 +51,20 @@ const fs = require('fs');
 
 // Option 2 - using promises
 // serial execution (one operation at time, so it is very slow, not async)
-fs.readdir(process.cwd(), async (err, filenames) => {
-	if (err) {
-		console.log(err);
-	}
+// fs.readdir(process.cwd(), async (err, filenames) => {
+// 	if (err) {
+// 		console.log(err);
+// 	}
 
-	for (let filename of filenames) {
-		try {
-			const stats = await lstat(filename);
-			console.log(filename, stats.isFile());
-		} catch (err) {
-			console.log(err);
-		}
-	}
-});
+// 	for (let filename of filenames) {
+// 		try {
+// 			const stats = await lstat(filename);
+// 			console.log(filename, stats.isFile());
+// 		} catch (err) {
+// 			console.log(err);
+// 		}
+// 	}
+// });
 
 // Option 2 - using promises (not greatest solution)
 // serial execution (one operation at time, so it is very slow, not async)
@@ -88,4 +88,26 @@ fs.readdir(process.cwd(), async (err, filenames) => {
 // const lstat = fs.promises.lstat; // https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_lstat_path_options
 
 // Promise Method 3.1 - destructuring
-const { lstat } = fs.promises; // https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_lstat_path_options
+// const { lstat } = fs.promises; // https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_lstat_path_options
+
+// Option 3 - PERFECT IMPLEMENTATION
+// all promises are made in parallel - way better performance than option 2
+const { lstat } = fs.promises;
+
+fs.readdir(process.cwd(), async (err, filenames) => {
+	if (err) {
+		console.log(err);
+	}
+
+	const statPromises = filenames.map((filename) => {
+		return lstat(filename);
+	});
+
+	const allStats = await Promise.all(statPromises);
+
+	for (let stats of allStats) {
+		const index = allStats.indexOf(stats);
+
+		console.log(filenames[index], stats.isFile());
+	}
+});
