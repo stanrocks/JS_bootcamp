@@ -98,13 +98,22 @@ const { lstat } = fs.promises;
 // https://www.npmjs.com/package/chalk
 const chalk = require('chalk');
 
-fs.readdir(process.cwd(), async (err, filenames) => {
+// print current folders
+// console.log(process.argv);
+
+// target dir = if user provided particular path (argv[2]) use it or use current working directory (cwd)
+const targetDir = process.argv[2] || process.cwd();
+
+const path = require('path'); // https://nodejs.org/docs/latest/api/path.html
+
+fs.readdir(targetDir, async (err, filenames) => {
 	if (err) {
 		console.log(err);
 	}
 
 	const statPromises = filenames.map((filename) => {
-		return lstat(filename);
+		// implement proper paths
+		return lstat(path.join(targetDir, filename)); // now it works with 'node index.js ..' command and shows what is inside parent folder
 	});
 
 	const allStats = await Promise.all(statPromises);
