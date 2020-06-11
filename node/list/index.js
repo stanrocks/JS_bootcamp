@@ -94,6 +94,10 @@ const fs = require('fs');
 // all promises are made in parallel - way better performance than option 2
 const { lstat } = fs.promises;
 
+// Console logs with colors (using chalk)
+// https://www.npmjs.com/package/chalk
+const chalk = require('chalk');
+
 fs.readdir(process.cwd(), async (err, filenames) => {
 	if (err) {
 		console.log(err);
@@ -108,6 +112,11 @@ fs.readdir(process.cwd(), async (err, filenames) => {
 	for (let stats of allStats) {
 		const index = allStats.indexOf(stats);
 
-		console.log(filenames[index], stats.isFile());
+		if (stats.isFile()) {
+			console.log(filenames[index]);
+		} else {
+			// print folder names with bold
+			console.log(chalk.bold(filenames[index]));
+		}
 	}
 });
