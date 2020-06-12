@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-console.log('I was executed');
+// console.log('I was executed');
 
 // nodemon-clone app
 // Issues:
@@ -10,3 +10,26 @@ console.log('I was executed');
 
 // https://www.npmjs.com/package/chokidar
 // https://www.npmjs.com/package/caporal
+// https://www.npmjs.com/package/lodash.debounce
+
+const debounce = require('lodash.debounce');
+const chokidar = require('chokidar');
+
+// listen for events with files
+// Problem with 'add' event is chokidar sees hundreds of files around, register 'add' event for each file and runs callback function for each event.
+// That problem might be fixed with debounce function
+
+// debounce example
+const start = debounce(() => {
+	console.log('STARTING USERS PROGRAM');
+}, 100);
+
+chokidar
+	// watch directory
+	.watch('.')
+	// new file created inside directory
+	.on('add', start)
+	// file changed inside directory
+	.on('change', () => console.log('FILE CHANGED'))
+	// file deleted inside directory
+	.on('unlink', () => console.log('FILE UNLINKED'));
