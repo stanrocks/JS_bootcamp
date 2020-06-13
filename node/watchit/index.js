@@ -14,6 +14,7 @@ const program = require('caporal'); // https://www.npmjs.com/package/caporal
 // using 'program' name cause it is how it's called in documentation
 const fs = require('fs');
 const { spawn } = require('child_process'); // https://nodejs.org/docs/latest/api/child_process.html - getting spawn from child process
+const chalk = require('chalk'); // styling console output
 
 // create CLI tool
 program
@@ -38,7 +39,8 @@ program
 			if (proc) {
 				proc.kill();
 			}
-			console.log('>>>> Starting process...');
+			// inform user that new process is starting
+			console.log(chalk.blue('>>>> Starting process...'));
 			// create new child process and save it's ID
 			proc = spawn(
 				'node',
