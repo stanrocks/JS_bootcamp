@@ -1,6 +1,9 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
+// use parser for POST-requests
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // routes
 // root route
@@ -16,35 +19,8 @@ app.get('/', (req, res) => {
   </div>`);
 });
 
-// middleware function that parses POST-requests
-const bodyParser = (req, res, next) => {
-	if (req.method === 'POST') {
-		// get access to email, password, password confirmation in buffer-form
-		// buffer example: <Buffer 65 6d 61 69 6c 3d 73 64 66 26 70 61 73 73 77 6f 72 64 3d 73 64 66 26 70 61 73 73 77 6f 72 64 43>
-		//
-		req.on('data', (data) => {
-			// convert buffer to text and split to array elements
-			// string example: email=sdf&password=sdf&passwordConfirmation=sdf
-			const parsed = data.toString('utf8').split('&');
-			const formData = {};
-			for (let pair of parsed) {
-				const [
-					key,
-					value
-				] = pair.split('=');
-				formData[key] = value;
-			}
-			req.body = formData;
-			next();
-		});
-	} else {
-		// if method is not POST - execute next function
-		next();
-	}
-};
-
-app.post('/', bodyParser, (req, res) => {
-	console.log(req);
+app.post('/', (req, res) => {
+	console.log(req.body);
 	res.send('Account created!');
 });
 
