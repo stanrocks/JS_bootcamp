@@ -28,19 +28,26 @@ program
 			throw new Error(`Could not find the file ${name}`);
 		}
 
+		let proc; // create undefined var to save process ID
 		// Problem with 'add' event is chokidar sees hundreds of files around, register 'add' event for each file and runs callback function for each event.
 		// That problem might be fixed with debounce function
 		// debounce (waits 100 ms before running callback function)
+
 		const start = debounce(() => {
-			// create new child process
-			spawn(
+			// if process exists - kill it (kills previous process if function started not for the first time)
+			if (proc) {
+				proc.kill();
+			}
+			console.log('>>>> Starting process...');
+			// create new child process and save it's ID
+			proc = spawn(
 				'node',
 				[
 					name
 				],
 				{ stdio: 'inherit' }
 			); // run new node child process to execute script (filename provided by user). standard IO is passing to same stream as watchit
-		}, 100);
+		}, 200);
 
 		// listen for events with files
 		chokidar
