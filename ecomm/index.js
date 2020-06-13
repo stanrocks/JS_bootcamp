@@ -16,24 +16,35 @@ app.get('/', (req, res) => {
   </div>`);
 });
 
-app.post('/', (req, res) => {
-	// get access to email, password, password confirmation in buffer-form
-	// buffer example: <Buffer 65 6d 61 69 6c 3d 73 64 66 26 70 61 73 73 77 6f 72 64 3d 73 64 66 26 70 61 73 73 77 6f 72 64 43>
-	//
-	req.on('data', (data) => {
-		// convert buffer to text and split to array elements
-		// string example: email=sdf&password=sdf&passwordConfirmation=sdf
-		const parsed = data.toString('utf8').split('&');
-		const formData = {};
-		for (let pair of parsed) {
-			const [
-				key,
-				value
-			] = pair.split('=');
-			formData[key] = value;
-		}
-		console.log(formData);
-	});
+// middleware function that parses POST-requests
+const bodyParser = (req, res, next) => {
+	if (req.method === 'POST') {
+		// get access to email, password, password confirmation in buffer-form
+		// buffer example: <Buffer 65 6d 61 69 6c 3d 73 64 66 26 70 61 73 73 77 6f 72 64 3d 73 64 66 26 70 61 73 73 77 6f 72 64 43>
+		//
+		req.on('data', (data) => {
+			// convert buffer to text and split to array elements
+			// string example: email=sdf&password=sdf&passwordConfirmation=sdf
+			const parsed = data.toString('utf8').split('&');
+			const formData = {};
+			for (let pair of parsed) {
+				const [
+					key,
+					value
+				] = pair.split('=');
+				formData[key] = value;
+			}
+			req.body = formData;
+			next();
+		});
+	} else {
+		// if method is not POST - execute next function
+		next();
+	}
+};
+
+app.post('/', bodyParser, (req, res) => {
+	console.log(req);
 	res.send('Account created!');
 });
 
