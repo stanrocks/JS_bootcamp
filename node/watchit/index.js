@@ -12,31 +12,38 @@ const debounce = require('lodash.debounce'); // https://www.npmjs.com/package/lo
 const chokidar = require('chokidar'); // https://www.npmjs.com/package/chokidar
 const program = require('caporal'); // https://www.npmjs.com/package/caporal
 // using 'program' name cause it is how it's called in documentation
+const fs = require('fs');
 
 // create CLI tool
-// prettier-ignore
 program
-  .version('0.0.1')
-  .argument('[filename]', 'Name of a file to execute') // [optional argument] + comment for user (help is accessible with 'watchit -h')
-  .action((args) => console.log(args));
+	.version('0.0.1')
+	.argument('[filename]', 'Name of a file to execute') // [optional argument] + comment for user (help is accessible with 'watchit -h')
+	// destructuring 'args' to 'filename':
+	.action(async ({ filename }) => {
+		const name = filename || 'index.js'; // if filename doesn't defined by user - use index.js
+		try {
+			await fs.promises.access(name); // https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_access_path_mode
+		} catch (err) {
+			throw new Error(`Could not fine the file ${name}`);
+		}
+
+		// Problem with 'add' event is chokidar sees hundreds of files around, register 'add' event for each file and runs callback function for each event.
+		// That problem might be fixed with debounce function
+		// debounce (waits 100 ms before running callback function)
+		const start = debounce(() => {
+			console.log('STARTING USERS PROGRAM');
+		}, 100);
+
+		// listen for events with files
+		chokidar
+			// watch directory
+			.watch('.')
+			// new file created inside directory
+			.on('add', start)
+			// file changed inside directory
+			.on('change', start)
+			// file deleted inside directory
+			.on('unlink', start);
+	});
 
 program.parse(process.argv);
-
-// Problem with 'add' event is chokidar sees hundreds of files around, register 'add' event for each file and runs callback function for each event.
-// That problem might be fixed with debounce function
-
-// debounce example (waits 100 ms before running callback function)
-// const start = debounce(() => {
-// 	console.log('STARTING USERS PROGRAM');
-// }, 100);
-
-// listen for events with files
-// chokidar
-// 	// watch directory
-// 	.watch('.')
-// 	// new file created inside directory
-// 	.on('add', start)
-// 	// file changed inside directory
-// 	.on('change', () => console.log('FILE CHANGED'))
-// 	// file deleted inside directory
-// 	.on('unlink', () => console.log('FILE UNLINKED'));
