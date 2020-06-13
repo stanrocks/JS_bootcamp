@@ -13,6 +13,7 @@ const chokidar = require('chokidar'); // https://www.npmjs.com/package/chokidar
 const program = require('caporal'); // https://www.npmjs.com/package/caporal
 // using 'program' name cause it is how it's called in documentation
 const fs = require('fs');
+const { spawn } = require('child_process'); // https://nodejs.org/docs/latest/api/child_process.html - getting spawn from child process
 
 // create CLI tool
 program
@@ -24,14 +25,21 @@ program
 		try {
 			await fs.promises.access(name); // https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_access_path_mode
 		} catch (err) {
-			throw new Error(`Could not fine the file ${name}`);
+			throw new Error(`Could not find the file ${name}`);
 		}
 
 		// Problem with 'add' event is chokidar sees hundreds of files around, register 'add' event for each file and runs callback function for each event.
 		// That problem might be fixed with debounce function
 		// debounce (waits 100 ms before running callback function)
 		const start = debounce(() => {
-			console.log('STARTING USERS PROGRAM');
+			// create new child process
+			spawn(
+				'node',
+				[
+					name
+				],
+				{ stdio: 'inherit' }
+			); // run new node child process to execute script (filename provided by user). standard IO is passing to same stream as watchit
 		}, 100);
 
 		// listen for events with files
@@ -47,3 +55,6 @@ program
 	});
 
 program.parse(process.argv);
+
+// test from CLI with this command:
+// watchit test.js
