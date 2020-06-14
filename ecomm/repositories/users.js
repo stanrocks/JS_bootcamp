@@ -1,4 +1,5 @@
 const fs = require('fs');
+const crypto = require('crypto');
 
 class UsersRepository {
 	// create repo with empty array
@@ -31,7 +32,10 @@ class UsersRepository {
 	}
 
 	async create(attrs) {
-		// {email: '23ewrwe@dkfj.co, passwords: 'kjlfajf' - plaintext oops, will fix later}
+		// result: {email: '23ewrwe@dkfj.co, passwords: 'kjlfajf' - plaintext oops, will fix later}
+		// add ID to newly created object
+		attrs.id = this.randomID();
+
 		// read data at first, then add new object
 		const records = await this.getAll();
 		records.push(attrs);
@@ -42,6 +46,11 @@ class UsersRepository {
 	async writeAll(records) {
 		// write updated 'records' array back to this.filename
 		await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2)); // 'null' is custom formatter (we dont need that, that is why it is = null). '2' means # of indentation levels (how many spaces in tab)
+	}
+
+	randomID() {
+		// https://nodejs.org/docs/latest/api/crypto.html#crypto_crypto_randombytes_size_callback
+		return crypto.randomBytes(4).toString('hex');
 	}
 }
 
