@@ -21,11 +21,25 @@ class UsersRepository {
 			fs.writeFileSync(filename, '[]');
 		}
 	}
+	async getAll() {
+		// Open file this.filename - https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_readfile_path_options
+		const contents = await fs.promises.readFile(this.filename, { encoding: 'utf8' });
+		// Read its contents
+		console.log(contents);
+		// Parse contents
+		// Return parsed data
+	}
 }
-
-const repo = new UsersRepository('users.json');
 
 // Tests
 
-// 1. should throw error:
+// 1. filename is not defined - should throw error:
 // new UsersRepository();
+
+// 2. test getAll
+const test = async () => {
+	const repo = new UsersRepository('users.json');
+
+	await repo.getAll();
+};
+test();
