@@ -45,12 +45,24 @@ class UsersRepository {
 
 	async writeAll(records) {
 		// write updated 'records' array back to this.filename
-		await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2)); // 'null' is custom formatter (we dont need that, that is why it is = null). '2' means # of indentation levels (how many spaces in tab)
+		await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2)); // 'null' is custom formatter (we don't need that, that is why it is = null). '2' means # of indentation levels (how many spaces in tab)
 	}
 
 	randomID() {
 		// https://nodejs.org/docs/latest/api/crypto.html#crypto_crypto_randombytes_size_callback
 		return crypto.randomBytes(4).toString('hex');
+	}
+
+	async getOne(id) {
+		const records = await this.getAll();
+		return records.find((record) => record.id === id);
+	}
+
+	async delete(id) {
+		const records = await this.getAll();
+		// filter creates a new array with all elements that pass the test
+		const filteredRecords = records.filter((record) => record.id !== id); // return true if id is not match
+		await this.writeAll(filteredRecords);
 	}
 }
 
@@ -60,12 +72,33 @@ class UsersRepository {
 // new UsersRepository();
 
 // 2. test getAll
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	await repo.create({ email: 'test@test.com', passwords: 'passwords' });
+// 	const users = await repo.getAll();
+// 	console.log(users);
+// };
+// test();
+
+// 3. test getOne
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	const user = await repo.getOne('04be1c15');
+// 	console.log(user);
+// };
+// test();
+
+// 3.1 test getOne if that ID doesn't exist - return 'undefined'
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	const user = await repo.getOne('04');
+// 	console.log(user);
+// };
+// test();
+
+// 4. test delete
 const test = async () => {
 	const repo = new UsersRepository('users.json');
-
-	await repo.create({ email: 'test@test.com', passwords: 'passwords' });
-
-	const users = await repo.getAll();
-	console.log(users);
+	await repo.delete('0d762978'); // put existing id from users.json
 };
 test();
