@@ -22,12 +22,10 @@ class UsersRepository {
 		}
 	}
 	async getAll() {
-		// Open file this.filename - https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_readfile_path_options
-		const contents = await fs.promises.readFile(this.filename, { encoding: 'utf8' });
-		// Read its contents
-		console.log(contents);
+		// Open 'filename'-file using fsPromises.readFile - https://nodejs.org/docs/latest/api/fs.html#fs_fspromises_readfile_path_options
 		// Parse contents
 		// Return parsed data
+		return JSON.parse(await fs.promises.readFile(this.filename, { encoding: 'utf8' }));
 	}
 }
 
@@ -40,6 +38,7 @@ class UsersRepository {
 const test = async () => {
 	const repo = new UsersRepository('users.json');
 
-	await repo.getAll();
+	const users = await repo.getAll();
+	console.log(users);
 };
 test();
