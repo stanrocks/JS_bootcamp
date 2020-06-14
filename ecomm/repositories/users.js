@@ -10,6 +10,7 @@ class UsersRepository {
 		// storing passed filename in instance variable
 		this.filename = filename;
 
+		// Test if json file exists
 		// https://nodejs.org/docs/latest/api/fs.html
 		// There are 3 versions:
 		// 1. fs.access (using callback)
@@ -64,6 +65,21 @@ class UsersRepository {
 		const filteredRecords = records.filter((record) => record.id !== id); // return true if id is not match
 		await this.writeAll(filteredRecords);
 	}
+
+	async update(id, attrs) {
+		// get all records
+		const records = await this.getAll();
+		// find record with provided id
+		const record = records.find((record) => record.id === id);
+		// if no record found
+		if (!record) {
+			throw new Error(`Record with id ${id} not found`);
+		}
+		// get attrs and write them to record
+		Object.assign(record, attrs);
+		// write updated records
+		await this.writeAll(records);
+	}
 }
 
 // Tests
@@ -97,8 +113,30 @@ class UsersRepository {
 // test();
 
 // 4. test delete
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	await repo.delete('0d762978'); // put existing id from users.json
+// };
+// test();
+
+// 5. test update
+// step 1: create new user
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	await repo.create({ email: 'test@test.com' });
+// };
+// test();
+
+// step 2: update existing user (paste ID of existing user)
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	await repo.update('f6a9af7b', { password: 'password' });
+// };
+// test();
+
+// 5.1 test update when there is no such user (id123123123123)
 const test = async () => {
 	const repo = new UsersRepository('users.json');
-	await repo.delete('0d762978'); // put existing id from users.json
+	await repo.update('123123123123', { password: 'password' });
 };
 test();
