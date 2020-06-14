@@ -80,6 +80,24 @@ class UsersRepository {
 		// write updated records
 		await this.writeAll(records);
 	}
+
+	async getOneBy(filters) {
+		// get all records
+		const records = await this.getAll();
+		// iterate through array
+		for (let record of records) {
+			let found = true;
+			// iterate through object
+			for (let key in filters) {
+				if (record[key] !== filters[key]) {
+					found = false;
+				}
+			}
+			if (found) {
+				return records;
+			}
+		}
+	}
 }
 
 // Tests
@@ -135,8 +153,16 @@ class UsersRepository {
 // test();
 
 // 5.1 test update when there is no such user (id123123123123)
+// const test = async () => {
+// 	const repo = new UsersRepository('users.json');
+// 	await repo.update('123123123123', { password: 'password' });
+// };
+// test();
+
+// 6. test getOneBy
 const test = async () => {
 	const repo = new UsersRepository('users.json');
-	await repo.update('123123123123', { password: 'password' });
+	const user = await repo.getOneBy({ email: 'test@test.com', password: 'password123' });
+	console.log(user);
 };
 test();
