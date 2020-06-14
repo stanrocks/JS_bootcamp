@@ -35,8 +35,13 @@ class UsersRepository {
 		// read data at first, then add new object
 		const records = await this.getAll();
 		records.push(attrs);
+
+		await this.writeAll(records);
+	}
+
+	async writeAll(records) {
 		// write updated 'records' array back to this.filename
-		await fs.promises.writeFile(this.filename, JSON.stringify(records));
+		await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2)); // 'null' is custom formatter (we dont need that, that is why it is = null). '2' means # of indentation levels (how many spaces in tab)
 	}
 }
 
