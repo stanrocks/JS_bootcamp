@@ -17,7 +17,7 @@ app.use(
 
 // routes
 // root route
-app.get('/', (req, res) => {
+app.get('/signup', (req, res) => {
 	res.send(`
   <div>
     Your id is: ${req.session.userId}
@@ -27,11 +27,12 @@ app.get('/', (req, res) => {
       <input name="passwordConfirmation" placeholder="password confirmation" />
       <button>Sign Up</button>
     </form>
-  </div>`);
+  </div>
+  `);
 });
 
 // account creation route
-app.post('/', async (req, res) => {
+app.post('/signup', async (req, res) => {
 	const { email, password, passwordConfirmation } = req.body;
 
 	// check if email is already in use
@@ -53,6 +54,26 @@ app.post('/', async (req, res) => {
 
 	res.send('Account created!');
 });
+
+app.get('/signout', (req, res) => {
+	// reset user cookie
+	req.session = null;
+	res.send('You are logged out');
+});
+
+app.get('/signin', (req, res) => {
+	res.send(`
+    <div>
+      <form method="POST">
+        <input name="email" placeholder="email" />
+        <input name="password" placeholder="password" />
+        <button>Sign In</button>
+      </form>
+  </div>
+  `);
+});
+
+app.post('/signin', async (req, res) => {});
 
 app.listen(3000, () => {
 	console.log('Listening');
