@@ -85,7 +85,8 @@ app.post('/signin', async (req, res) => {
 	}
 
 	// check if password in DB match to password provided by user through sign in form
-	if (user.password !== password) {
+	const validPassword = await usersRepo.comparePasswords(user.password, password);
+	if (!validPassword) {
 		return res.send('Invalid password');
 	}
 

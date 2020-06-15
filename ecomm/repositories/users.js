@@ -74,10 +74,10 @@ class UsersRepository {
 			hashed,
 			salt
 		] = saved.split('.');
-		// create hash from supplied password with previously stored salt (salt has been saved when user created account)
-		const hashedSupplied = await scrypt(supplied, salt, 64);
+		// create hash (buffer) from supplied password with previously stored salt (salt has been saved when user created account)
+		const hashedSuppliedBuf = await scrypt(supplied, salt, 64);
 
-		return hashed === hashedSupplied;
+		return hashed === hashedSuppliedBuf.toString('hex');
 	}
 
 	async writeAll(records) {
