@@ -120,7 +120,7 @@ class UsersRepository {
 	async getOneBy(filters) {
 		// get all records
 		const records = await this.getAll();
-		console.log('records: ', records);
+		// console.log('records: ', records);
 		// iterate through array
 		for (let record of records) {
 			let found = true;

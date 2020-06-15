@@ -1,4 +1,5 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator'); // https://www.npmjs.com/package/express-validator
 const usersRepo = require('../../repositories/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
@@ -10,28 +11,40 @@ router.get('/signup', (req, res) => {
 });
 
 // account creation route
-router.post('/signup', async (req, res) => {
-	const { email, password, passwordConfirmation } = req.body;
+// validating and sanitizing input
+// https://github.com/validatorjs/validator.js
+router.post(
+	'/signup',
+	[
+		check('email').trim().normalizeEmail().isEmail(),
+		check('password').trim().isLength({ min: 4, max: 20 }),
+		check('passwordConfirmation').trim().isLength({ min: 4, max: 20 })
+	],
+	async (req, res) => {
+		const errors = validationResult(req);
+		console.log(errors);
+		const { email, password, passwordConfirmation } = req.body;
 
-	// check if email is already in use
-	const existingUser = await usersRepo.getOneBy({ email });
-	if (existingUser) {
-		return res.send('Email in use');
+		// check if email is already in use
+		const existingUser = await usersRepo.getOneBy({ email });
+		if (existingUser) {
+			return res.send('Email in use');
+		}
+
+		// check if password is not confirmed
+		if (password !== passwordConfirmation) {
+			return res.send('Passwords must match');
+		}
+
+		// Create a user in our user repo to represent this person
+		const user = await usersRepo.create({ email, password });
+
+		// Store the id of that user inside the users cookie
+		req.session.userId = user.id; // 'session' object (inside req) is created by cookie session
+
+		res.send('Account created!');
 	}
-
-	// check if password is not confirmed
-	if (password !== passwordConfirmation) {
-		return res.send('Passwords must match');
-	}
-
-	// Create a user in our user repo to represent this person
-	const user = await usersRepo.create({ email, password });
-
-	// Store the id of that user inside the users cookie
-	req.session.userId = user.id; // 'session' object (inside req) is created by cookie session
-
-	res.send('Account created!');
-});
+);
 
 router.get('/signout', (req, res) => {
 	// reset user cookie
