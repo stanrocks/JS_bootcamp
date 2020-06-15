@@ -1,5 +1,10 @@
 const fs = require('fs');
 const crypto = require('crypto');
+const util = require('util');
+
+// scrypt: https://nodejs.org/docs/latest/api/crypto.html#crypto_crypto_scrypt_password_salt_keylen_options_callback
+// make crypto.scrypt able to work in async mode, now scrypt returns promise
+const scrypt = util.promisify(crypto.scrypt);
 
 class UsersRepository {
 	// create repo with empty array
@@ -37,13 +42,25 @@ class UsersRepository {
 		// add ID to newly created object
 		attrs.id = this.randomID();
 
+		// randomBytes: https://nodejs.org/docs/latest/api/crypto.html#crypto_crypto_randombytes_size_callback
+		const salt = crypto.randomBytes(8).toString('hex');
+
+		// let's wait for hash to be generated, save to buffer
+		const buf = await scrypt(attrs.password, salt, 64);
+
 		// read data at first, then add new object
 		const records = await this.getAll();
-		records.push(attrs);
+
+		// record consists of all attrs + hashed password + . + salt
+		const record = {
+			...attrs,
+			password: `${buf.toString('hex')}.${salt}`
+		};
+		records.push(record);
 
 		await this.writeAll(records);
 
-		return attrs;
+		return record;
 	}
 
 	async writeAll(records) {
