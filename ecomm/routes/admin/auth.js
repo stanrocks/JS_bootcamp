@@ -1,5 +1,6 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator'); // https://www.npmjs.com/package/express-validator
+// https://express-validator.github.io/docs/
 const usersRepo = require('../../repositories/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
@@ -16,25 +17,28 @@ router.get('/signup', (req, res) => {
 router.post(
 	'/signup',
 	[
-		check('email').trim().normalizeEmail().isEmail(),
-		check('password').trim().isLength({ min: 4, max: 20 }),
-		check('passwordConfirmation').trim().isLength({ min: 4, max: 20 })
+		check('email').trim().normalizeEmail().isEmail().withMessage('Must be a valid email').custom(async (email) => {
+			// check if email is already in use
+			const existingUser = await usersRepo.getOneBy({ email });
+			if (existingUser) {
+				throw new Error('Email in use');
+			}
+		}),
+		check('password').trim().isLength({ min: 4, max: 20 }).withMessage('Must be between 4 and 20 characters'),
+		check('passwordConfirmation')
+			.trim()
+			.isLength({ min: 4, max: 20 })
+			.withMessage('Must be between 4 and 20 characters')
+			.custom((passwordConfirmation, { req }) => {
+				if (passwordConfirmation !== req.body.password) {
+					throw new Error('Passwords must match');
+				}
+			})
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
 		console.log(errors);
 		const { email, password, passwordConfirmation } = req.body;
-
-		// check if email is already in use
-		const existingUser = await usersRepo.getOneBy({ email });
-		if (existingUser) {
-			return res.send('Email in use');
-		}
-
-		// check if password is not confirmed
-		if (password !== passwordConfirmation) {
-			return res.send('Passwords must match');
-		}
 
 		// Create a user in our user repo to represent this person
 		const user = await usersRepo.create({ email, password });
