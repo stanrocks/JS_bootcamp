@@ -24,7 +24,12 @@ router.post(
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
-		console.log(errors);
+		// console.log(errors);
+
+		// if error exists (errors is not empty) - send errors to template
+		if (!errors.isEmpty()) {
+			return res.send(signupTemplate({ req, errors }));
+		}
 
 		const { email, password, passwordConfirmation } = req.body;
 		// Create a user in our user repo to represent this person
