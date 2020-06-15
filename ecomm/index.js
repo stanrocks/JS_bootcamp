@@ -1,16 +1,26 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 const usersRepo = require('./repositories/users');
 
 const app = express();
 // use parser for POST-requests
 app.use(bodyParser.urlencoded({ extended: true }));
+// cookie session adds 1 additional property to HTTP-requests (req.session)
+app.use(
+	cookieSession({
+		keys: [
+			'sld34jk7f6ls8kd9j73452flsk3344jd7f'
+		]
+	})
+);
 
 // routes
 // root route
 app.get('/', (req, res) => {
 	res.send(`
   <div>
+    Your id is: ${req.session.userId}
     <form method="POST">
       <input name="email" placeholder="email" />
       <input name="password" placeholder="password" />
@@ -39,6 +49,7 @@ app.post('/', async (req, res) => {
 	const user = await usersRepo.create({ email, password });
 
 	// Store the id of that user inside the users cookie
+	req.session.userId = user.id; // 'session' object (inside req) is created by cookie session
 
 	res.send('Account created!');
 });
