@@ -55,7 +55,7 @@ router.get('/signout', (req, res) => {
 });
 
 router.get('/signin', (req, res) => {
-	res.send(signinTemplate());
+	res.send(signinTemplate({})); // passing empty object (fake 'errors' object) cause template expecting 'errors' object
 });
 
 router.post(
@@ -66,7 +66,11 @@ router.post(
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
-		console.log(errors);
+		// console.log(errors);
+		if (!errors.isEmpty()) {
+			return res.send(signinTemplate({ errors }));
+		}
+
 		// get email from form inputs
 		const { email } = req.body;
 		// check if user with email exists
