@@ -21,7 +21,7 @@ class UsersRepository {
 			fs.accessSync(this.filename);
 		} catch (err) {
 			// if file not exist - create new one
-			fs.writeFileSync(filename, '[]');
+			fs.writeFileSync(this.filename, '[]');
 		}
 	}
 
@@ -86,6 +86,7 @@ class UsersRepository {
 	async getOneBy(filters) {
 		// get all records
 		const records = await this.getAll();
+		console.log('records: ', records);
 		// iterate through array
 		for (let record of records) {
 			let found = true;
@@ -96,7 +97,7 @@ class UsersRepository {
 				}
 			}
 			if (found) {
-				return records;
+				return record;
 			}
 		}
 	}

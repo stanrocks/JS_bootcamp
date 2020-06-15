@@ -73,7 +73,26 @@ app.get('/signin', (req, res) => {
   `);
 });
 
-app.post('/signin', async (req, res) => {});
+app.post('/signin', async (req, res) => {
+	// get email and password from form inputs
+	const { email, password } = req.body;
+	// check if user with email exists
+	const user = await usersRepo.getOneBy({ email });
+	console.log(user);
+
+	if (!user) {
+		return res.send('Email not found');
+	}
+
+	// check if password in DB match to password provided by user through sign in form
+	if (user.password !== password) {
+		return res.send('Invalid password');
+	}
+
+	// user is authenticated
+	req.session.userId = user.id;
+	res.send('You are signed in!');
+});
 
 app.listen(3000, () => {
 	console.log('Listening');
