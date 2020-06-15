@@ -5,6 +5,8 @@ const authRouter = require('./routes/admin/auth');
 
 const app = express();
 
+app.use(express.static('public'));
+
 // use parser for POST-requests
 app.use(bodyParser.urlencoded({ extended: true }));
 // cookie session adds 1 additional property to HTTP-requests (req.session)
