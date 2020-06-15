@@ -23,15 +23,23 @@ app.get('/', (req, res) => {
 // account creation route
 app.post('/', async (req, res) => {
 	const { email, password, passwordConfirmation } = req.body;
+
 	// check if email is already in use
 	const existingUser = await usersRepo.getOneBy({ email });
 	if (existingUser) {
 		return res.send('Email in use');
 	}
+
 	// check if password is not confirmed
 	if (password !== passwordConfirmation) {
 		return res.send('Passwords must match');
 	}
+
+	// Create a user in our user repo to represent this person
+	const user = await usersRepo.create({ email, password });
+
+	// Store the id of that user inside the users cookie
+
 	res.send('Account created!');
 });
 
