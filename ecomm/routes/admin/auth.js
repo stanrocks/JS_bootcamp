@@ -52,26 +52,39 @@ router.get('/signin', (req, res) => {
 	res.send(signinTemplate());
 });
 
-router.post('/signin', async (req, res) => {
-	// get email and password from form inputs
-	const { email, password } = req.body;
-	// check if user with email exists
-	const user = await usersRepo.getOneBy({ email });
-	console.log(user);
+router.post(
+	'/signin',
+	[
+		check('email').trim().normalizeEmail().isEmail().withMessage('Must provide a valid email').custom(async (email) => {
+			const user = await usersRepo.getOneBy({ email });
+			if (!user) {
+				throw new Error('Email not found');
+			}
+		}),
+		check('password').trim()
+	],
+	async (req, res) => {
+		const errors = validationResult(req);
+		console.log(errors);
+		// get email and password from form inputs
+		const { email, password } = req.body;
+		// check if user with email exists
+		const user = await usersRepo.getOneBy({ email });
 
-	if (!user) {
-		return res.send('Email not found');
+		if (!user) {
+			return res.send('Email not found');
+		}
+
+		// check if password in DB match to password provided by user through sign in form
+		const validPassword = await usersRepo.comparePasswords(user.password, password);
+		if (!validPassword) {
+			return res.send('Invalid password');
+		}
+
+		// user is authenticated
+		req.session.userId = user.id;
+		res.send('You are signed in!');
 	}
-
-	// check if password in DB match to password provided by user through sign in form
-	const validPassword = await usersRepo.comparePasswords(user.password, password);
-	if (!validPassword) {
-		return res.send('Invalid password');
-	}
-
-	// user is authenticated
-	req.session.userId = user.id;
-	res.send('You are signed in!');
-});
+);
 
 module.exports = router;
