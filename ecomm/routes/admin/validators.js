@@ -28,5 +28,30 @@ module.exports = {
 			if (passwordConfirmation !== req.body.password) {
 				throw new Error('Passwords must match');
 			}
-		})
+		}),
+
+	requireEmailExists: check('email')
+		.trim()
+		.normalizeEmail()
+		.isEmail()
+		.withMessage('Must provide a valid email')
+		.custom(async (email) => {
+			const user = await usersRepo.getOneBy({ email });
+			if (!user) {
+				throw new Error('Email not found');
+			}
+		}),
+
+	requireValidPasswordForUser: check('password').trim().custom(async (password, { req }) => {
+		const user = await usersRepo.getOneBy({ email: req.body.email });
+		// check if user exists
+		if (!user) {
+			throw new Error('Invalid password'); // technically its different error, but in real life if no username provided - it still make sense to show that
+		}
+		// check if password in DB match to password provided by user through sign in form
+		const validPassword = await usersRepo.comparePasswords(user.password, password);
+		if (!validPassword) {
+			throw new Error('Invalid password');
+		}
+	})
 };
