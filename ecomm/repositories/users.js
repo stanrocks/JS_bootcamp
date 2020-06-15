@@ -63,6 +63,23 @@ class UsersRepository {
 		return record;
 	}
 
+	async comparePasswords(saved, supplied) {
+		// Saved -> password saved in our DB. 'hashed.salt'
+		// Supplied -> password given to us by a user trying to sign in
+		// const result = saved.split('.'); // result is an array with 2 strings - hash and salt
+		// const hashed = result[0];
+		// const salt = result[1];
+		// same thing in single line:
+		const [
+			hashed,
+			salt
+		] = saved.split('.');
+		// create hash from supplied password with previously stored salt (salt has been saved when user created account)
+		const hashedSupplied = await scrypt(supplied, salt, 64);
+
+		return hashed === hashedSupplied;
+	}
+
 	async writeAll(records) {
 		// write updated 'records' array back to this.filename
 		await fs.promises.writeFile(this.filename, JSON.stringify(records, null, 2)); // 'null' is custom formatter (we don't need that, that is why it is = null). '2' means # of indentation levels (how many spaces in tab)
