@@ -20,10 +20,17 @@ router.post(
 		requirePrice
 	],
 	upload.single('image'),
-	(req, res) => {
+	async (req, res) => {
 		const errors = validationResult(req);
 		// console.log(errors);
 		console.log(req.file); // shows multer parsing result of user data uploaded through form
+		const image = req.file.buffer.toString('base64'); // encode image using base64
+		const { title, price } = req.body;
+		await productsRepo.create({
+			title,
+			price,
+			image
+		});
 
 		res.send('submitted');
 	}
