@@ -1,6 +1,6 @@
 const express = require('express');
-const { check, validationResult } = require('express-validator'); // https://www.npmjs.com/package/express-validator
-// https://express-validator.github.io/docs/
+
+const { handleErrors } = require('./middlewares');
 const usersRepo = require('../../repositories/users');
 const signupTemplate = require('../../views/admin/auth/signup');
 const signinTemplate = require('../../views/admin/auth/signin');
@@ -28,16 +28,9 @@ router.post(
 		requirePassword,
 		requirePasswordConfirmation
 	],
+	handleErrors(signupTemplate),
 	async (req, res) => {
-		const errors = validationResult(req);
-		// console.log(errors);
-
-		// if error exists (errors is not empty) - send errors to template
-		if (!errors.isEmpty()) {
-			return res.send(signupTemplate({ req, errors }));
-		}
-
-		const { email, password, passwordConfirmation } = req.body;
+		const { email, password } = req.body;
 		// Create a user in our user repo to represent this person
 		const user = await usersRepo.create({ email, password });
 
@@ -64,13 +57,8 @@ router.post(
 		requireEmailExists,
 		requireValidPasswordForUser
 	],
+	handleErrors(signinTemplate),
 	async (req, res) => {
-		const errors = validationResult(req);
-		// console.log(errors);
-		if (!errors.isEmpty()) {
-			return res.send(signinTemplate({ errors }));
-		}
-
 		// get email from form inputs
 		const { email } = req.body;
 		// check if user with email exists
