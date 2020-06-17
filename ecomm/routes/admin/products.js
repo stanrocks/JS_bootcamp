@@ -15,13 +15,18 @@ router.get('/admin/products/new', (req, res) => {
 });
 router.post(
 	'/admin/products/new',
+	upload.single('image'),
 	[
 		requireTitle,
 		requirePrice
 	],
-	upload.single('image'),
 	async (req, res) => {
 		const errors = validationResult(req);
+		// if error occurs - render form page and output errors
+		if (!errors.isEmpty()) {
+			return res.send(productsNewTemplate({ errors }));
+		}
+
 		// console.log(errors);
 		console.log(req.file); // shows multer parsing result of user data uploaded through form
 		const image = req.file.buffer.toString('base64'); // encode image using base64
