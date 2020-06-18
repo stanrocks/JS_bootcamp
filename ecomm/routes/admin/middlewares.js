@@ -13,5 +13,13 @@ module.exports = {
 			// in case of no errors - call next function
 			next();
 		};
+	},
+	// redirect if user is not logged in (admin area requires authentication)
+	requireAuth(req, res, next) {
+		if (!req.session.userId) {
+			return res.redirect('/signin');
+		}
+		// if user logged in - call next func
+		next();
 	}
 };

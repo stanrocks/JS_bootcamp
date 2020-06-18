@@ -3,5 +3,15 @@
     "email": "test005@test.com",
     "password": "e2b8cc9094f60764ce395a1bc5511b904390e537f82d4369c11fc0893935fe8a1d91283c6d94e109f7e1a7e3f5ac5f1050a8a8738c1bdab53571a7cd96f8edf3.d549991dec9e128b",
     "id": "05556b65"
+  },
+  {
+    "email": "kek@kek.com",
+    "password": "33c8a8c21c190aca30168ae91de8de741752160e1f0a55dd796bafaa1a92d054a339c9dc2425bf8dcd16e31936a4efb526b73fadb196a32a45250b411b6d224b.ef74ce6f33076701",
+    "id": "9897733b"
+  },
+  {
+    "email": "test@test.com",
+    "password": "58cc928ea1af219d6edf7a34e9bb63062d52e9f82dfaf0634439985cc3a10f8dacefc6259159824d004421feee1fdc820fb66c30c97cdd4f7e55cd24e85de1f6.8bdd1e332ba7993e",
+    "id": "48d7abbb"
   }
 ]
