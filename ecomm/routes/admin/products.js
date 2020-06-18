@@ -14,9 +14,11 @@ router.get('/admin/products', async (req, res) => {
 	const products = await productsRepo.getAll();
 	res.send(productsIndexTemplate({ products }));
 });
+
 router.get('/admin/products/new', (req, res) => {
 	res.send(productsNewTemplate({}));
 });
+
 router.post(
 	'/admin/products/new',
 	upload.single('image'),
@@ -35,7 +37,7 @@ router.post(
 			image
 		});
 
-		res.send('submitted');
+		res.redirect('/admin/products');
 	}
 );
 
