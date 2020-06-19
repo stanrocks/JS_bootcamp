@@ -58,6 +58,32 @@ router.get('/admin/products/:id/edit', requireAuth, async (req, res) => {
 	res.send(productsEditTemplate({ product }));
 });
 
-router.post('/admin/products/:id/edit', requireAuth, async (req, res) => {});
+router.post(
+	'/admin/products/:id/edit',
+	requireAuth,
+	upload.single('image'),
+	[
+		requireTitle,
+		requirePrice
+	],
+	handleErrors(productsEditTemplate),
+	async (req, res) => {
+		// save edited version of form inputs (image is not included)
+		const changes = req.body;
+		// if user provided an image file - add it to changes
+		if (req.file) {
+			changes.image = req.file.buffer.toString('base64');
+		}
+		// try to find product with particular id
+		try {
+			// apply changes to product with particular id
+			await productsRepo.update(req.params.id, changes);
+		} catch (err) {
+			return res.send('Could not find item');
+		}
+		// redirect to products list after edit completion
+		res.redirect('/admin/products');
+	}
+);
 
 module.exports = router;
