@@ -66,7 +66,10 @@ router.post(
 		requireTitle,
 		requirePrice
 	],
-	handleErrors(productsEditTemplate),
+	handleErrors(productsEditTemplate, async (req) => {
+		const product = await productsRepo.getOne(req.params.id);
+		return { product };
+	}),
 	async (req, res) => {
 		// save edited version of form inputs (image is not included)
 		const changes = req.body;

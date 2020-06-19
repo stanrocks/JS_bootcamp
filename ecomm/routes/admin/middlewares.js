@@ -2,13 +2,19 @@ const { validationResult } = require('express-validator');
 
 module.exports = {
 	// receive template function, tells what template to load in case of error
-	handleErrors(templateFunc) {
-		return (req, res, next) => {
+	// receive optional data callback (dataCb)
+	handleErrors(templateFunc, dataCb) {
+		return async (req, res, next) => {
 			const errors = validationResult(req);
-			console.log(errors);
+
+			// console.log(errors);
 			// in case of error - execute template and pass data about errors to it
 			if (!errors.isEmpty()) {
-				return res.send(templateFunc({ errors }));
+				let data = {};
+				if (dataCb) {
+					data = await dataCb(req);
+				}
+				return res.send(templateFunc({ errors, ...data }));
 			}
 			// in case of no errors - call next function
 			next();
