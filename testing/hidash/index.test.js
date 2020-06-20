@@ -44,5 +44,5 @@ it('The map function', () => {
 	// assert.strictEqual(result[2], 6);
 
 	// refactor 2
-	assert.deepStrictEqual(result, [ 2, 4, 7 ]);
+	assert.deepStrictEqual(result, [ 2, 4, 6 ]);
 });
