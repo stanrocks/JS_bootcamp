@@ -2,17 +2,17 @@ const assert = require('assert'); // https://nodejs.org/docs/latest/api/assert.h
 const { forEach, map } = require('./index'); // tested functions
 
 // helper function
-const test = (desc, fn) => {
-	console.log('----', desc);
-	try {
-		fn();
-	} catch (err) {
-		console.log(err.message);
-	}
-};
+// const test = (desc, fn) => {
+// 	console.log('----', desc);
+// 	try {
+// 		fn();
+// 	} catch (err) {
+// 		console.log(err.message);
+// 	}
+// };
 
 // test forEach
-test('The forEach function', () => {
+it('The forEach function', () => {
 	let sum = 0;
 	forEach([ 1, 2, 3 ], (value) => {
 		sum += value;
@@ -22,7 +22,7 @@ test('The forEach function', () => {
 });
 
 // test map
-test('The map function', () => {
+it('The map function', () => {
 	const result = map([ 1, 2, 3 ], (value) => {
 		return value * 2;
 	});
@@ -44,5 +44,5 @@ test('The map function', () => {
 	// assert.strictEqual(result[2], 6);
 
 	// refactor 2
-	assert.deepStrictEqual(result, [ 2, 4, 6 ]);
+	assert.deepStrictEqual(result, [ 2, 4, 7 ]);
 });
