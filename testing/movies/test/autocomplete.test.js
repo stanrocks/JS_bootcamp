@@ -9,4 +9,10 @@ it('Shows an autocomplete', () => {
 			return movie.Title;
 		}
 	});
+
+	// check if dropdown is not active (expected behavior)
+	const dropdown = document.querySelector('.dropdown');
+
+	// chai-expect manual: https://www.chaijs.com/guide/styles/#expect
+	expect(dropdown.className).not.to.include('is-active');
 });
