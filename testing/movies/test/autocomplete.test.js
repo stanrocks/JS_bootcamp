@@ -45,7 +45,7 @@ it('Dropdown starts closed', () => {
 	expect(dropdown.className).not.to.include('is-active');
 });
 
-it('After searching. dropdown opens up', async () => {
+it('After searching, dropdown opens up', async () => {
 	const input = document.querySelector('input');
 	// put text to text input
 	input.value = 'avengers';
@@ -57,4 +57,18 @@ it('After searching. dropdown opens up', async () => {
 	const dropdown = document.querySelector('.dropdown');
 	// dropdown should be active
 	expect(dropdown.className).to.include('is-active');
+});
+
+it('After searching, displays some results', async () => {
+	const input = document.querySelector('input');
+	// put text to text input
+	input.value = 'avengers';
+	// fake DOM event as if user typed text into text input
+	input.dispatchEvent(new Event('input'));
+
+	await waitFor('.dropdown-item');
+
+	const items = document.querySelectorAll('.dropdown-item');
+	// check if result of search shows 3 movies:
+	expect(items.length).to.equal(3);
 });
