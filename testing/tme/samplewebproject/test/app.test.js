@@ -19,6 +19,20 @@ it('shows a success message with a valid email', async () => {
 
 	// check h1 that should change after user submit
 	const h1 = dom.window.document.querySelector('h1');
+	// console.log('Contents of h1:', h1.innerHTML);
+	assert.strictEqual(h1.innerHTML, 'Looks good!'); // expecting h1 to consist that phrase
+});
 
-	console.log('Contents of h1:', h1.innerHTML);
+it('shows a fail message with a invalid email', async () => {
+	const dom = await render('index.html');
+
+	const input = dom.window.document.querySelector('input');
+	input.value = 'alksd'; // emulate user input of NOT proper email (without '@')
+
+	dom.window.document.querySelector('form').dispatchEvent(new dom.window.Event('submit')); // emulate user submitting form
+
+	// check h1 that should change after user submit
+	const h1 = dom.window.document.querySelector('h1');
+	// console.log('Contents of h1:', h1.innerHTML);
+	assert.strictEqual(h1.innerHTML, 'Invalid email'); // expecting h1 to consist that phrase
 });
