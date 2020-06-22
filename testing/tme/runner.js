@@ -2,7 +2,8 @@ const fs = require('fs'); // https://nodejs.org/docs/latest/api/fs.html
 const path = require('path'); // https://nodejs.org/docs/latest/api/path.html
 const chalk = require('chalk'); // https://www.npmjs.com/package/chalk
 
-// collects files to be tested
+forbiddenDirs = [ 'node_modules' ];
+
 class Runner {
 	constructor() {
 		this.testFiles = [];
@@ -11,6 +12,7 @@ class Runner {
 	async runTests() {
 		for (let file of this.testFiles) {
 			console.log(chalk.grey(`---- Testing: ${file.shortName}`));
+
 			// beforeEach
 			const beforeEaches = [];
 			global.beforeEach = (fn) => {
@@ -41,6 +43,7 @@ class Runner {
 		}
 	}
 
+	// collects files to be tested
 	async collectFiles(targetPath) {
 		const files = await fs.promises.readdir(targetPath);
 
@@ -53,7 +56,7 @@ class Runner {
 			if (stats.isFile() && file.includes('.test.js')) {
 				// filepath - absolute path, file - relative path
 				this.testFiles.push({ name: filepath, shortName: file });
-			} else if (stats.isDirectory()) {
+			} else if (stats.isDirectory() && !forbiddenDirs.includes(file)) {
 				const childFiles = await fs.promises.readdir(filepath);
 
 				files.push(...childFiles.map((f) => path.join(file, f)));
