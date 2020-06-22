@@ -19,10 +19,22 @@ class Runner {
 			global.it = (desc, fn) => {
 				// console.log(desc);
 				beforeEaches.forEach((func) => func());
-				fn();
+				try {
+					fn();
+					console.log(`OK - ${desc}`);
+				} catch (err) {
+					console.log(`X - ${desc}`);
+					console.log('\t', err.message);
+				}
 			};
 
-			require(file.name);
+			try {
+				// get tested file
+				require(file.name);
+			} catch (err) {
+				// error loading file (syntax errors, etc)
+				console.log(err);
+			}
 		}
 	}
 

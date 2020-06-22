@@ -23,5 +23,7 @@ it('should sum an array', () => {
 
 it('beforeEach is ran each time', () => {
 	// array should be reset to initial state with beforeEach
-	assert.strictEqual(numbers.length, 3);
+	assert.strictEqual(numbers.length, 4);
 });
+
+dfgda fga gfg
