@@ -23,10 +23,11 @@ class Runner {
 				beforeEaches.forEach((func) => func());
 				try {
 					fn();
-					console.log(chalk.green(`OK - ${desc}`));
+					console.log(chalk.green('\t', `OK - ${desc}`));
 				} catch (err) {
-					console.log(chalk.red(`X - ${desc}`));
-					console.log(chalk.red('\t', err.message));
+					const message = err.message.replace(/\n/g, '\n\t\t'); // find globally new line char and replace it with new line with 2 tabs
+					console.log(chalk.red('\t', `X - ${desc}`));
+					console.log(chalk.red('\t', message));
 				}
 			};
 
