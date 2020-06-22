@@ -13,6 +13,7 @@ class Runner {
 	async runTests() {
 		for (let file of this.testFiles) {
 			console.log(chalk.grey(`---- Testing: ${file.shortName}`));
+
 			// DOM emulation
 			global.render = render;
 
