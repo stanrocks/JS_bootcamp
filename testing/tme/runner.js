@@ -1,6 +1,7 @@
 const fs = require('fs'); // https://nodejs.org/docs/latest/api/fs.html
 const path = require('path'); // https://nodejs.org/docs/latest/api/path.html
 const chalk = require('chalk'); // https://www.npmjs.com/package/chalk
+const render = require('./render'); // DOM emulation with jsdom
 
 forbiddenDirs = [ 'node_modules' ];
 
@@ -12,6 +13,8 @@ class Runner {
 	async runTests() {
 		for (let file of this.testFiles) {
 			console.log(chalk.grey(`---- Testing: ${file.shortName}`));
+			// DOM emulation
+			global.render = render;
 
 			// beforeEach
 			const beforeEaches = [];
