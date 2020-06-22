@@ -25,5 +25,3 @@ it('beforeEach is ran each time', () => {
 	// array should be reset to initial state with beforeEach
 	assert.strictEqual(numbers.length, 4);
 });
-
-dfgda fga gfg
