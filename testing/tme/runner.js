@@ -24,11 +24,11 @@ class Runner {
 			};
 
 			// it
-			global.it = (desc, fn) => {
+			global.it = async (desc, fn) => {
 				// console.log(desc);
 				beforeEaches.forEach((func) => func());
 				try {
-					fn();
+					await fn();
 					console.log(chalk.green('\t', `OK - ${desc}`));
 				} catch (err) {
 					const message = err.message.replace(/\n/g, '\n\t\t'); // find globally new line char and replace it with new line with 2 tabs
